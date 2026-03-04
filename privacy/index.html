@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secret of Orgasm - Customer Support - Refund Request</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f0015;
+      color: #e0d4ff;
+      min-height: 100vh;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: linear-gradient(135deg, #0f0015 0%, #3a004d 50%, #0f0015 100%);
+      border-bottom: 2px solid #c300ff;
+      text-align: center;
+      padding: 35px 20px;
+    }
+
+    .header h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+
+    .header h1 .white {
+      color: #ffffff;
+    }
+
+    .header h1 .purple {
+      color: #c300ff;
+    }
+
+    .header p {
+      color: #b399ff;
+      font-size: 1.1rem;
+      margin-top: 8px;
+      font-weight: 400;
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background-color: #14001f;
+      border: 1px solid #4a0072;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .card-title {
+      color: #d500f9;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title .icon {
+      font-size: 1.3rem;
+    }
+
+    /* ===== POLICY LIST ===== */
+    .policy-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .policy-item .icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .policy-item strong {
+      color: #ffffff;
+    }
+
+    /* ===== FORM ===== */
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      color: #d4c2ff;
+    }
+
+    .form-label .required {
+      color: #ff00cc;
+      font-weight: 700;
+    }
+
+    .form-label .optional {
+      color: #a080ff;
+      font-weight: 400;
+      font-size: 0.85rem;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-date {
+      width: 100%;
+      padding: 14px 16px;
+      background-color: #1f0033;
+      border: 1px solid #5a008c;
+      border-radius: 8px;
+      color: #e0d4ff;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-date:focus {
+      outline: none;
+      border-color: #c300ff;
+      box-shadow: 0 0 0 3px rgba(195, 0, 255, 0.25);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: #9966ff;
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-date {
+      cursor: pointer;
+      color-scheme: dark;
+    }
+
+    /* ===== CHECKBOX ===== */
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin: 25px 0;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #b399ff;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      accent-color: #c300ff;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .checkbox-group .required {
+      color: #ff00cc;
+    }
+
+    /* ===== SUBMIT BUTTON ===== */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #a500cc, #c300ff);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #8c00aa, #a500cc);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(195, 0, 255, 0.45);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* ===== HELP SECTION ===== */
+    .help-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .help-item .icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .help-item a {
+      color: #c300ff;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .help-item a:hover {
+      color: #e066ff;
+      text-decoration: underline;
+    }
+
+    /* ===== INFO BOX ===== */
+    .info-box {
+      background-color: rgba(195, 0, 255, 0.12);
+      border: 1px solid rgba(195, 0, 255, 0.30);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      font-size: 0.88rem;
+      color: #b399ff;
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      color: #ff00cc;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      padding: 25px 20px;
+      border-top: 1px solid #2a004a;
+      color: #9966ff;
+      font-size: 0.85rem;
+    }
+
+    .footer .brand {
+      color: #c300ff;
+      font-weight: 700;
+    }
+
+    .footer p {
+      margin-bottom: 5px;
+    }
+
+    /* ===== FLOATING SUPPORT BUTTON ===== */
+    .floating-support {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .floating-support .tooltip {
+      background-color: #14001f;
+      color: #c300ff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid #c300ff;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .floating-support:hover .tooltip {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .floating-support-btn {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a500cc, #c300ff);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(195, 0, 255, 0.5);
+      transition: all 0.3s ease;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .floating-support-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(195, 0, 255, 0.7);
+    }
+
+    .floating-support-btn svg {
+      width: 30px;
+      height: 30px;
+      fill: #ffffff;
+    }
+
+    /* Pulse animation */
+    .floating-support-btn::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(195, 0, 255, 0.35);
+      animation: pulse-ring 2s ease-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    /* Online badge */
+    .online-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      background-color: #c300ff;
+      border: 3px solid #0f0015;
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .card-title {
+        font-size: 1.25rem;
+      }
+
+      .floating-support {
+        bottom: 18px;
+        right: 18px;
+      }
+
+      .floating-support-btn {
+        width: 55px;
+        height: 55px;
+      }
+
+      .floating-support-btn svg {
+        width: 26px;
+        height: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <h1><span class="white">SECRET</span><span class="purple">OF ORGASM</span></h1>
+    <p>Customer Support - Refund Request</p>
+  </header>
+  <div class="container">
+    <!-- REFUND POLICY -->
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">🛡️</span> Our Refund Policy
+      </div>
+      <div class="policy-item">
+        <span class="icon">✅</span>
+        <div><strong>30-Day Money-Back Guarantee:</strong> We offer a full refund within 30 days of your purchase date.</div>
+      </div>
+      <div class="policy-item">
+        <span class="icon">🕐</span>
+        <div><strong>Processing Time:</strong> Refund requests are typically processed within 3-5 business days.</div>
+      </div>
+      <div class="policy-item">
+        <span class="icon">💳</span>
+        <div><strong>Refund Method:</strong> Refunds will be issued to the original payment method used for purchase.</div>
+      </div>
+    </div>
+    <!-- REFUND FORM -->
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">📋</span> Submit Your Refund Request
+      </div>
+      <form action="https://formsubmit.co/support@secredoforgasm.online" method="POST">
+        <input type="hidden" name="_subject" value="Refund Request - Secret of Orgasm">
+        <input type="hidden" name="_captcha" value="true">
+        <input type="hidden" name="_template" value="box">
+        <input type="hidden" name="_next" value="">
+        <!-- Full Name -->
+        <div class="form-group">
+          <label class="form-label">
+            👤 <strong>Full Name</strong> <span class="required">*</span>
+          </label>
+          <input type="text" name="full_name" class="form-input" placeholder="Enter your full name" required>
+        </div>
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label">
+            ✉️ <strong>Email Address</strong> <span class="required">*</span>
+          </label>
+          <input type="email" name="email" class="form-input" placeholder="Enter the email used for purchase" required>
+        </div>
+        <!-- Purchase Date -->
+        <div class="form-group">
+          <label class="form-label">
+            📅 <strong>Purchase Date</strong> <span class="required">*</span>
+          </label>
+          <input type="date" name="purchase_date" class="form-date" required>
+        </div>
+        <!-- Order ID -->
+        <div class="form-group">
+          <label class="form-label">
+            # <strong>Order ID</strong> <span class="optional">(Optional)</span>
+          </label>
+          <input type="text" name="order_id" class="form-input" placeholder="Enter your order ID if available">
+        </div>
+        <!-- Reason -->
+        <div class="form-group">
+          <label class="form-label">
+            💬 <strong>Reason for Refund</strong> <span class="optional">(Optional)</span>
+          </label>
+          <textarea name="reason" class="form-textarea" placeholder="Please let us know why you're requesting a refund (this helps us improve our service)"></textarea>
+        </div>
+        <!-- Checkbox -->
+        <div class="checkbox-group">
+          <input type="checkbox" id="agree" required>
+          <label for="agree">
+            I understand that this refund request will be processed according to the refund policy stated above, and I confirm that all information provided is accurate. <span class="required">*</span>
+          </label>
+        </div>
+        <!-- Submit -->
+        <button type="submit" class="submit-btn">
+          ✈️ Submit Refund Request
+        </button>
+      </form>
+    </div>
+    <!-- ALTERNATIVE REFUND METHODS -->
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">🔄</span> Other Ways to Request a Refund
+      </div>
+      <div class="help-item">
+        <span class="icon">✉️</span>
+        <div>Via email: <a href="mailto:support@secredoforgasm.online">support@secredoforgasm.online</a></div>
+      </div>
+      <div class="help-item">
+        <span class="icon">🌐</span>
+        <div>Via website: <a href="https://explodely.com/contact/" target="_blank">https://explodely.com/contact/</a></div>
+      </div>
+      <div class="help-item">
+        <span class="icon">📞</span>
+        <div>By phone: <strong>+1 (833) EXP-LDLY</strong> or <strong>+1 (833) 397-5359</strong></div>
+      </div>
+    </div>
+    <!-- NEED HELP -->
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">🎧</span> Need Help?
+      </div>
+      <div class="help-item">
+        <span class="icon">✉️</span>
+        <div>Questions about the product? Email us: <a href="mailto:support@secredoforgasm.online">support@secredoforgasm.online</a></div>
+      </div>
+      <div class="help-item">
+        <span class="icon">🕐</span>
+        <div>Response time: Within 24 hours</div>
+      </div>
+      <div class="help-item">
+        <span class="icon">❓</span>
+        <div>Having trouble? We're here to help make this process as smooth as possible.</div>
+      </div>
+      <div class="info-box">
+        <strong>⚠️ Important:</strong> For product questions and general support, please contact <strong>support@secredoforgasm.online</strong>. For refund requests, use the form above or contact <strong>support@secredoforgasm.online</strong>.
+      </div>
+    </div>
+  </div>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 SECRET<span class="brand">OF ORGASM</span>. All rights reserved.</p>
+    <p>Your satisfaction is our priority</p>
+  </footer>
+  <!-- FLOATING SUPPORT BUTTON -->
+  <div class="floating-support">
+    <div class="tooltip">💬 Need Support?</div>
+    <a href="mailto:support@secredoforgasm.online" class="floating-support-btn" title="Contact Support">
+      <span class="online-badge"></span>
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 1c-4.97 0-9 3.58-9 8 0 1.5.5 2.89 1.35 4.1L3 21l4.59-2.3C8.86 19.54 10.39 20 12 20c4.97 0 9-3.58 9-8s-4.03-8-9-8zm0 14c-1.1 0-2-.45-2-1s.9-1 2-1 2 .45 2 1-.9 1-2 1zm1.13-4.27c-.55.37-.63.56-.63 1.02V12h-1v-.25c0-.79.34-1.26 1.03-1.72.55-.37.72-.56.72-1.03 0-.52-.45-1-1.25-1-.72 0-1.19.39-1.34.95L9.68 8.6C9.96 7.53 10.85 7 12 7c1.3 0 2.25.78 2.25 2 0 .79-.34 1.26-1.12 1.73z" />
+      </svg>
+    </a>
+  </div>
+</body>
+
+</html>
