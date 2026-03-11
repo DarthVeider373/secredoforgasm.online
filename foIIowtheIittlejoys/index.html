@@ -14,51 +14,51 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 
+<!--
+<script>
+  const BR_REDIRECT_URL = "../followthelittlejoys";
 
-  <script>
-    const BR_REDIRECT_URL = "../followthelittlejoys";
+  function isMobile() {
+    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
 
-    function isMobile() {
-      return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
+  function showPage() {
+    document.documentElement.style.visibility = "visible";
+    document.body.style.visibility = "visible";
+    document.body.style.overflow = "auto";
+  }
 
-    function showPage() {
-      document.documentElement.style.visibility = "visible";
-      document.body.style.visibility = "visible";
-      document.body.style.overflow = "auto";
-    }
+  function redirect(url) {
+    window.location.href = url + window.location.search;
+  }
 
-    function redirect(url) {
-      window.location.href = url + window.location.search;
-    }
+  try {
+    fetch("https://ipapi.co/json/")
+      .then(r => r.json())
+      .then(data => {
+        const country = data && data.country;
 
-    try {
-      fetch("https://ipapi.co/json/")
-        .then(r => r.json())
-        .then(data => {
-          const country = data && data.country;
+        // BR (desktop OU mobile) -> redireciona
+        if (country === "BR") {
+          redirect(BR_REDIRECT_URL);
+          return;
+        }
 
-          // BR (desktop OU mobile) -> redireciona
-          if (country === "BR") {
-            redirect(BR_REDIRECT_URL);
-            return;
-          }
-
-          // Mobile fora do BR -> NÃO redireciona (mostra página)
-          if (isMobile()) {
-            showPage();
-            return;
-          }
-
-          // Desktop fora do BR -> também não redireciona (mostra página)
+        // Mobile fora do BR -> NÃO redireciona (mostra página)
+        if (isMobile()) {
           showPage();
-        })
-        .catch(() => showPage());
-    } catch (e) {
-      showPage();
-    }
-  </script>
+          return;
+        }
 
+        // Desktop fora do BR -> também não redireciona (mostra página)
+        showPage();
+      })
+      .catch(() => showPage());
+  } catch (e) {
+    showPage();
+  }
+</script>
+-->
 
 
   <script>
