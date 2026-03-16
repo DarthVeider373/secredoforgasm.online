@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intimate Performance Assessment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08080e;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-hover: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #ededf0;
+      --text2: #8888a0;
+      --accent: #8b5cf6;
+      --accent2: #ec4899;
+      --grad: linear-gradient(135deg, #8b5cf6, #ec4899);
+      --r: 14px;
+      --t: 0.35s cubic-bezier(0.4, 0, 0.2, 1)
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15)0%, rgba(236, 72, 153, 0.08)40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0
+    }
+
+    .qc {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 20px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      width: 100%
+    }
+
+    .pw {
+      padding: 16px 0;
+      opacity: 0;
+      transition: opacity .5s
+    }
+
+    .pw.vis {
+      opacity: 1
+    }
+
+    .pi {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--text2);
+      font-weight: 500
+    }
+
+    .pb {
+      width: 100%;
+      height: 4px;
+      background: var(--surface);
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .pf {
+      height: 100%;
+      background: var(--grad);
+      border-radius: 4px;
+      transition: width .6s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%
+    }
+
+    .step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .5s ease, transform .5s ease
+    }
+
+    .step.active {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .step.exit {
+      opacity: 0;
+      transform: translateY(-20px)
+    }
+
+    .si {
+      font-size: 48px;
+      margin-bottom: 20px;
+      display: block
+    }
+
+    .st {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -.5px
+    }
+
+    .gt {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .ss {
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 440px
+    }
+
+    .og {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px
+    }
+
+    .oc {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      cursor: pointer;
+      transition: all var(--t);
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+      user-select: none;
+      position: relative
+    }
+
+    .oc:hover {
+      background: var(--surface-hover);
+      border-color: rgba(139, 92, 246, .3);
+      transform: translateY(-1px)
+    }
+
+    .oc.sel {
+      background: rgba(139, 92, 246, .12);
+      border-color: rgba(139, 92, 246, .5)
+    }
+
+    .oc .oi {
+      font-size: 22px;
+      flex-shrink: 0
+    }
+
+    .oc .cc {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, .15);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--t);
+      margin-left: auto
+    }
+
+    .oc.sel .cc {
+      background: var(--grad);
+      border-color: transparent
+    }
+
+    .oc.sel .cc::after {
+      content: '✓';
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700
+    }
+
+    .oc .cb {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid rgba(255, 255, 255, .15);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--t);
+      margin-left: auto
+    }
+
+    .oc.sel .cb {
+      background: var(--grad);
+      border-color: transparent
+    }
+
+    .oc.sel .cb::after {
+      content: '✓';
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700
+    }
+
+    .yng {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+      margin-top: 8px
+    }
+
+    .ynb {
+      padding: 24px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      cursor: pointer;
+      transition: all var(--t);
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      font-family: inherit
+    }
+
+    .ynb:hover {
+      background: var(--surface-hover);
+      transform: translateY(-2px)
+    }
+
+    .sc-c {
+      width: 100%;
+      margin-top: 16px
+    }
+
+    .sc-t {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap
+    }
+
+    .sc-d {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--t);
+      color: var(--text2)
+    }
+
+    .sc-d:hover {
+      background: var(--surface-hover);
+      transform: scale(1.1)
+    }
+
+    .sc-d.act {
+      background: var(--grad);
+      border-color: transparent;
+      color: #fff;
+      transform: scale(1.15)
+    }
+
+    .sc-l {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text2);
+      padding: 0 4px
+    }
+
+    .stn {
+      font-size: 72px;
+      font-weight: 900;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin: 16px 0;
+      opacity: 0;
+      transform: scale(.5);
+      transition: all .8s cubic-bezier(.34, 1.56, .64, 1)
+    }
+
+    .stn.an {
+      opacity: 1;
+      transform: scale(1)
+    }
+
+    .lc {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px
+    }
+
+    .lr {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--surface);
+      border-top-color: var(--accent);
+      animation: spin 1s linear infinite
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .lt {
+      font-size: 14px;
+      color: var(--text2);
+      transition: opacity .3s
+    }
+
+    .lp {
+      width: 240px;
+      height: 3px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .lpf {
+      height: 100%;
+      background: var(--grad);
+      border-radius: 3px;
+      transition: width .3s
+    }
+
+    .gc {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 24px
+    }
+
+    .gbg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .gin {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center
+    }
+
+    .gscore {
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1
+    }
+
+    .glbl {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px
+    }
+
+    .bd {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0
+    }
+
+    .bi {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px
+    }
+
+    .bl {
+      flex: 1;
+      text-align: left;
+      color: var(--text2)
+    }
+
+    .bbr {
+      width: 120px;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .bfl {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease .5s
+    }
+
+    .bv {
+      width: 35px;
+      text-align: right;
+      font-weight: 600;
+      font-size: 12px
+    }
+
+    .tc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      text-align: left;
+      margin-top: 16px;
+      width: 100%
+    }
+
+    .ts {
+      color: #fbbf24;
+      font-size: 14px;
+      margin-bottom: 10px
+    }
+
+    .tt {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      font-style: italic;
+      margin-bottom: 12px
+    }
+
+    .ta {
+      font-size: 12px;
+      color: var(--text2);
+      font-weight: 600
+    }
+
+    .tds {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px
+    }
+
+    .td {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--surface-hover);
+      transition: all .3s
+    }
+
+    .td.act {
+      background: var(--accent);
+      width: 18px;
+      border-radius: 3px
+    }
+
+    .fc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      text-align: left;
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .4s ease
+    }
+
+    .fc.vis {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .fc .fi {
+      font-size: 24px;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .fc .fti {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .fc .fd {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .bc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      text-align: left;
+      width: 100%;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all .5s ease
+    }
+
+    .bc.vis {
+      opacity: 1;
+      transform: translateX(0)
+    }
+
+    .bh {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px
+    }
+
+    .bbdg {
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--grad);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .5px
+    }
+
+    .bval {
+      font-size: 12px;
+      color: var(--text2);
+      text-decoration: line-through;
+      margin-left: auto
+    }
+
+    .btl {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px
+    }
+
+    .bdc {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .ps {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin: 20px 0
+    }
+
+    .po {
+      font-size: 18px;
+      color: var(--text2);
+      text-decoration: line-through
+    }
+
+    .pc {
+      font-size: 56px;
+      font-weight: 900;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1
+    }
+
+    .pp {
+      font-size: 14px;
+      color: var(--text2)
+    }
+
+    .pdy {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 4px
+    }
+
+    .cta {
+      width: 100%;
+      padding: 18px 32px;
+      background: var(--grad);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--t);
+      position: relative;
+      overflow: hidden;
+      margin-top: 16px;
+      letter-spacing: .3px;
+      display: block;
+      text-align: center;
+      text-decoration: none
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(139, 92, 246, .3)
+    }
+
+    .cta::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .15), transparent);
+      animation: shimmer 2.5s infinite
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%
+      }
+
+      100% {
+        left: 100%
+      }
+    }
+
+    .cnt {
+      width: 100%;
+      padding: 16px 32px;
+      background: var(--grad);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--t);
+      margin-top: 20px;
+      opacity: .4;
+      pointer-events: none
+    }
+
+    .cnt.en {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    .cnt.en:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, .25)
+    }
+
+    .acnt {
+      width: 100%;
+      padding: 16px 32px;
+      background: var(--grad);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--t);
+      margin-top: 24px
+    }
+
+    .acnt:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, .25)
+    }
+
+    .tmc {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 16px 0
+    }
+
+    .tmb {
+      display: flex;
+      flex-direction: column;
+      align-items: center
+    }
+
+    .tmv {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 24px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      min-width: 56px;
+      text-align: center
+    }
+
+    .tml {
+      font-size: 9px;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px
+    }
+
+    .gb {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid rgba(34, 197, 94, .2);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      width: 100%;
+      text-align: left;
+      margin: 16px 0
+    }
+
+    .gbi {
+      font-size: 36px;
+      flex-shrink: 0
+    }
+
+    .gbt {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .gbt strong {
+      color: #22c55e
+    }
+
+    .tbg {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+      flex-wrap: wrap
+    }
+
+    .tbgi {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text2)
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.03)
+      }
+    }
+
+    .pulse {
+      animation: pulse 2s ease-in-out infinite
+    }
+
+    @keyframes fiu {
+      from {
+        opacity: 0;
+        transform: translateY(15px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .fiu {
+      animation: fiu .5s ease forwards
+    }
+
+    .d1 {
+      animation-delay: .1s;
+      opacity: 0
+    }
+
+    .d2 {
+      animation-delay: .2s;
+      opacity: 0
+    }
+
+    .d3 {
+      animation-delay: .3s;
+      opacity: 0
+    }
+
+    .d4 {
+      animation-delay: .4s;
+      opacity: 0
+    }
+
+    .d5 {
+      animation-delay: .5s;
+      opacity: 0
+    }
+
+    .d6 {
+      animation-delay: .6s;
+      opacity: 0
+    }
+
+    .d7 {
+      animation-delay: .7s;
+      opacity: 0
+    }
+
+    .d8 {
+      animation-delay: .8s;
+      opacity: 0
+    }
+
+    /* Footer Styles */
+    .site-footer {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      background: rgba(0, 0, 0, .4);
+      padding: 24px 20px 32px;
+      text-align: center
+    }
+
+    .site-footer .footer-divider {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, .06);
+      margin: 0 auto 20px;
+      max-width: 520px
+    }
+
+    .site-footer p {
+      max-width: 520px;
+      margin: 0 auto 14px;
+      color: var(--text2);
+      font-size: 11px;
+      line-height: 1.65;
+      opacity: .7
+    }
+
+    .site-footer .footer-links {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      margin: 16px auto;
+      max-width: 520px;
+      padding: 0
+    }
+
+    .site-footer .footer-links li {
+      list-style: none
+    }
+
+    .site-footer .footer-links a {
+      color: rgba(255, 255, 255, .5);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      transition: color .3s
+    }
+
+    .site-footer .footer-links a:hover {
+      color: rgba(255, 255, 255, .85)
+    }
+
+    .site-footer nav {
+      margin: 16px 0
+    }
+
+    @media(max-width:480px) {
+      .st {
+        font-size: 22px
+      }
+
+      .sc-d {
+        width: 32px;
+        height: 32px;
+        font-size: 12px
+      }
+
+      .pc {
+        font-size: 46px
+      }
+
+      .stn {
+        font-size: 56px
+      }
+
+      .tmv {
+        font-size: 20px;
+        min-width: 48px;
+        padding: 8px 10px
+      }
+
+      .site-footer .footer-links {
+        gap: 6px 12px
+      }
+
+      .site-footer .footer-links a {
+        font-size: 11px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-glow"></div>
+  <div class="qc">
+    <div class="pw" id="pw">
+      <div class="pi"><span id="si">Step 1 of 31</span><span id="pci">0%</span></div>
+      <div class="pb">
+        <div class="pf" id="pfl"></div>
+      </div>
+    </div>
+    <div id="sc"></div>
+  </div>
+
+  <footer class="site-footer">
+    <hr class="footer-divider">
+    <p>
+      The information provided on this website is for general informational purposes only and is sourced from publicly available or third-party data. We do not guarantee the accuracy, completeness, or current validity of any information displayed, nor do we verify phone number ownership. This website is not affiliated with any telecom operator, government authority, or law-enforcement agency. Users agree to use this service at their own risk and in compliance with applicable laws, including data-protection and information-technology regulations. The information must not be used for harassment, stalking, defamation, or any unlawful activity.
+    </p>
+    <p>
+      Explodely is the trusted payment gateway for Secret of Orgasm.
+      Explodely is a trademark of Explodely LLC, a US corporation located at
+      1317 Edgewater Drive Suite #4648, Orlando FL, 32804, United States, and is used by permission.
+      Explodely's role as a gateway provider does not constitute an endorsement, approval,
+      or review of this product(s) or any claim, statement, or opinion used in the promotion of this product(s).
+    </p>
+    <nav>
+      <ul class="footer-links">
+        <li><a href="https://secredoforgasm.online/terms-of-service" target="_blank" rel="noopener">Terms of Service</a></li>
+        <li><a href="https://secredoforgasm.online/disclaimer" target="_blank" rel="noopener">Disclaimer</a></li>
+        <li><a href="https://secredoforgasm.online/ftc-compliance" target="_blank" rel="noopener">FTC Compliance</a></li>
+        <li><a href="https://secredoforgasm.online/refund-policy" target="_blank" rel="noopener">Refund Policy</a></li>
+        <li><a href="https://help.explodely.com/support/tickets/new" target="_blank" rel="noopener noreferrer">Billing Support</a></li>
+      </ul>
+    </nav>
+    <p>© <span id="footer-year"></span> Secret of Orgasm. All rights reserved.</p>
+    <p>Contact: <a href="mailto:support@secredoforgasm.online" style="color:var(--accent)">support@secredoforgasm.online</a></p>
+  </footer>
+
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    let cs = 0, ans = {}, tInt = null, tmInt = null;
+    const S = [
+      { type: 'intro', icon: '🔥', title: 'How Well Do You <span class="gt">Really Satisfy</span> Her?', sub: 'Take this confidential 2-minute assessment designed by a certified sexologist. Discover your intimate performance score and what you can improve.', btn: 'Start My Assessment →' },
+      { type: 'single', q: 'What is your age range?', sub: 'This helps us personalize your results.', opts: [{ i: '👤', t: '18 – 25' }, { i: '👤', t: '26 – 35' }, { i: '👤', t: '36 – 45' }, { i: '👤', t: '46 – 55' }, { i: '👤', t: '56+' }], k: 'age' },
+      { type: 'single', q: 'What is your current relationship status?', sub: 'Your situation affects the recommended approach.', opts: [{ i: '💚', t: 'Single' }, { i: '💛', t: 'Casually Dating' }, { i: '🧡', t: 'In a Relationship' }, { i: '❤️', t: 'Married' }, { i: '💔', t: 'Complicated' }], k: 'status' },
+      { type: 'single', q: 'How long with your current or most recent partner?', sub: '', opts: [{ i: '📅', t: 'Less than 6 months' }, { i: '📅', t: '6 – 12 months' }, { i: '📅', t: '1 – 3 years' }, { i: '📅', t: '3 – 5 years' }, { i: '📅', t: '5+ years' }], k: 'duration' },
+      { type: 'scale', q: 'On a scale of 1–10, how confident are you in your sexual performance?', sub: 'Be completely honest — this is 100% private.', lo: 'Not confident', hi: 'Very confident', k: 'confidence' },
+      { type: 'yesno', q: 'Have you ever thought during sex: "Am I really doing this right?"', sub: 'Almost every man has. No judgment here.', k: 'worry' },
+      { type: 'yesno', q: 'Has your partner ever said "that was great" but you weren\'t 100% sure she meant it?', sub: '', k: 'trust' },
+      { type: 'reveal', icon: '📊', stat: '67%', txt: 'of women have admitted to faking pleasure to protect their partner\'s feelings.', det: 'Women are socially conditioned to say what men want to hear. The truth is: most men have no idea if she\'s truly satisfied.', src: 'Based on clinical research in sexual psychology' },
+      { type: 'single', q: 'How often does your partner initiate sex?', sub: 'A partner who initiates frequently is a strong sign of satisfaction.', opts: [{ i: '❌', t: 'Almost never' }, { i: '😐', t: 'Rarely' }, { i: '🔄', t: 'Sometimes' }, { i: '😊', t: 'Often' }, { i: '🔥', t: 'Very often' }], k: 'initiation' },
+      { type: 'multi', q: 'Which areas do you feel LEAST confident in?', sub: 'Select all that apply.', opts: [{ i: '👅', t: 'Oral sex technique' }, { i: '🔄', t: 'Penetration skills' }, { i: '💋', t: 'Foreplay & teasing' }, { i: '💥', t: 'Making her orgasm' }, { i: '⏱️', t: 'Lasting long enough' }, { i: '🤷', t: 'Knowing what she wants' }], k: 'weakAreas', btn: 'Continue' },
+      { type: 'yesno', q: 'Do you know what the female A-spot, C-spot, and K-spot are?', sub: 'Most men only know about the G-spot. But there\'s much more.', k: 'knowSpots' },
+      { type: 'single', q: 'How many female pleasure zones could you confidently locate right now?', sub: '', opts: [{ i: '1️⃣', t: '0 – 1 zones' }, { i: '2️⃣', t: '2 – 3 zones' }, { i: '3️⃣', t: '4 – 5 zones' }, { i: '🌟', t: '6 or more' }], k: 'zones' },
+      { type: 'reveal', icon: '🗺️', stat: '7+', txt: 'primary pleasure zones exist that most men have never even heard of.', det: 'The G-spot is just the beginning. The U-spot, A-spot, C-spot, K-spot, and other trigger zones are where real pleasure unlocks.', src: 'Clinical mapping of female erogenous anatomy' },
+      { type: 'multi', q: 'Where did you learn most of what you know about sex?', sub: 'Select all that apply.', opts: [{ i: '📱', t: 'Pornography' }, { i: '🗣️', t: 'Friends & conversations' }, { i: '🛏️', t: 'Personal experience' }, { i: '📚', t: 'Books or articles' }, { i: '💬', t: 'Partner feedback' }, { i: '🏫', t: 'Formal education' }], k: 'sources', btn: 'Continue' },
+      { type: 'yesno', q: 'Do you believe pornography accurately shows what women enjoy in bed?', sub: '', k: 'pornBelief' },
+      { type: 'reveal', icon: '⚠️', stat: '91%', txt: 'of mainstream pornography depicts acts that women report as uncomfortable in real life.', det: 'Porn is designed to look good on camera — not to teach real technique. What appears pleasurable is often the exact opposite for women.', src: 'Research on media influence and sexual behavior' },
+      { type: 'single', q: 'Has your partner\'s interest in sex decreased over time?', sub: 'This is more common than you think — and usually fixable.', opts: [{ i: '📉', t: 'Yes, noticeably' }, { i: '↘️', t: 'Somewhat' }, { i: '➡️', t: 'Stayed the same' }, { i: '📈', t: 'Actually increased' }, { i: '❓', t: 'Not sure' }], k: 'decreased' },
+      { type: 'single', q: 'How often does your partner reach orgasm during sex?', sub: 'Be completely honest — this is crucial for your assessment.', opts: [{ i: '😔', t: 'Almost never' }, { i: '😕', t: 'Rarely (less than 25%)' }, { i: '😐', t: 'About half the time' }, { i: '😊', t: 'Most times (75%+)' }, { i: '🤩', t: 'Every time' }], k: 'orgFreq' },
+      { type: 'yesno', q: 'Have you ever made a woman have a powerful, full-body orgasm?', sub: 'The kind where she loses control, trembles, and can barely speak.', k: 'fullBody' },
+      { type: 'reveal', icon: '💡', stat: '100%', txt: 'of men can learn to give women multiple, intense orgasms — regardless of size or stamina.', det: 'Clinical research confirms it\'s about technique, not anatomy. The right knowledge changes everything.', src: 'Clinical sexology studies on female orgasm' },
+      { type: 'multi', q: 'What would change if you could GUARANTEE her pleasure every time?', sub: 'Select all that apply.', opts: [{ i: '💪', t: 'More confidence' }, { i: '❤️', t: 'Stronger relationship' }, { i: '🔥', t: 'She would initiate more' }, { i: '🤝', t: 'Deeper emotional connection' }, { i: '👑', t: 'She would see me differently' }, { i: '😌', t: 'My self-esteem would skyrocket' }], k: 'impact', btn: 'Continue' },
+      { type: 'scale', q: 'How important is it for you to improve your intimate skills RIGHT NOW?', sub: '', lo: 'Not urgent', hi: 'Extremely urgent', k: 'importance' },
+      { type: 'single', q: 'If a female sexologist could teach you step-by-step how to give any woman the best orgasm of her life — would you be interested?', sub: '', opts: [{ i: '✅', t: 'Absolutely yes' }, { i: '🤔', t: 'I\'m curious to know more' }, { i: '🔍', t: 'Already looking for this' }], k: 'commit' },
+      { type: 'loading', msgs: ['Analyzing your responses...', 'Calculating your performance score...', 'Mapping your improvement areas...', 'Identifying key opportunities...', 'Generating personalized recommendations...', 'Finalizing your report...'] },
+      { type: 'results' },
+      { type: 'testimonials', title: 'Men Like You Already Changed Their Lives', items: [{ t: '"Yesterday we tested some techniques and today the bed is completely soaked. My girlfriend has never reacted like that before."', a: 'Marcus T., 34', s: 5 }, { t: '"My wife squirted about seven times today. In five years of marriage, I had never seen that face of pure happiness after sex."', a: 'James R., 41', s: 5 }, { t: '"I never thought it was possible to make a woman finish using only my fingers. I applied this yesterday and it was absolutely insane."', a: 'David K., 28', s: 5 }, { t: '"I accessed it from my phone, and in the first lesson I understood where I was going wrong. My marriage is completely different now."', a: 'Robert S., 45', s: 5 }] },
+      { type: 'solution', name: 'Secrets of Orgasm', sub: 'A complete step-by-step system created by sexologist Roxy Fox, with 10 years of clinical experience and 28 proven techniques.', stats: [{ v: '30,000+', l: 'Students worldwide' }, { v: '28', l: 'Proven techniques' }, { v: '10', l: 'Years of research' }] },
+      { type: 'features', title: 'What You\'ll Master Inside', feats: [{ i: '🗺️', t: 'Pleasure Zone Mapping', d: 'Locate & stimulate all 7+ zones: G-spot, A-spot, U-spot, C-spot, K-spot, and hidden trigger areas.' }, { i: '🖐️', t: 'Advanced Finger Techniques', d: 'The exact movements, angles, and pressure that make her lose control in minutes.' }, { i: '👅', t: 'Oral Sex Mastery', d: '4 tongue techniques that get her addicted. Women go crazy with movement #3.' }, { i: '🔄', t: 'Position Matching System', d: 'Ideal positions based on YOUR anatomy for maximum stimulation.' }, { i: '🧠', t: 'Female Psychology Decoded', d: 'Understand what she secretly craves but will never tell you.' }, { i: '💦', t: 'The Squirt Method', d: 'Step-by-step guide to the most intense full-body release she\'s ever experienced.' }] },
+      { type: 'bonuses', title: '3 Exclusive Bonuses — FREE', sub: 'Only for those who join today.', bns: [{ b: 'BONUS 1', t: 'Live Masterclass with Roxy Fox', d: '3 secret advanced techniques demonstrated live, including painless methods to expand your repertoire.', v: '$97' }, { b: 'BONUS 2', t: 'Unlocking the Female Mind', d: 'Discover her hidden fantasies she\'s never told anyone. Create an environment where she surrenders completely.', v: '$147' }, { b: 'BONUS 3', t: 'How to Make Her Sexually Obsessed', d: '5 forbidden positions, 3 secret touch points, 7 magnetic messages that drive her wild all day.', v: '$297' }] },
+      { type: 'price' },
+      { type: 'guarantee' },
+      { type: 'cta' }
+    ];
+
+    function calcScore() {
+      let s = 50;
+      const c = ans.confidence || 5; s += (c - 5) * 2;
+      if (ans.worry === 'yes') s -= 5;
+      if (ans.trust === 'yes') s -= 5;
+      const im = ans.initiation || '';
+      if (im.includes('never')) s -= 10; else if (im.includes('Rarely')) s -= 5; else if (im.includes('Often') && !im.includes('Very')) s += 5; else if (im.includes('Very')) s += 10;
+      if (ans.knowSpots === 'no') s -= 8;
+      const z = ans.zones || '';
+      if (z.includes('0')) s -= 10; else if (z.includes('2')) s -= 5; else if (z.includes('6')) s += 5;
+      const o = ans.orgFreq || '';
+      if (o.includes('never')) s -= 15; else if (o.includes('Rarely')) s -= 10; else if (o.includes('half')) s -= 3; else if (o.includes('Most')) s += 3; else if (o.includes('Every')) s += 8;
+      if (ans.fullBody === 'no') s -= 5;
+      const d = ans.decreased || '';
+      if (d.includes('noticeably')) s -= 8; else if (d.includes('Somewhat')) s -= 4; else if (d.includes('increased')) s += 5;
+      return Math.max(12, Math.min(85, s));
+    }
+    function sColor(s) { return s < 30 ? '#ef4444' : s < 50 ? '#f97316' : s < 70 ? '#eab308' : '#22c55e' }
+    function sLabel(s) { return s < 30 ? 'Needs Improvement' : s < 50 ? 'Below Average' : s < 70 ? 'Average' : 'Above Average' }
+
+    function render(idx) {
+      const step = S[idx], ctr = document.getElementById('sc'), pw = document.getElementById('pw');
+      if (step.type === 'intro') { pw.classList.remove('vis') } else { pw.classList.add('vis'); const p = Math.round((idx / (S.length - 1)) * 100); document.getElementById('pfl').style.width = p + '%'; document.getElementById('si').textContent = 'Step ' + idx + ' of ' + (S.length - 1); document.getElementById('pci').textContent = p + '%' }
+      if (tInt) { clearInterval(tInt); tInt = null }
+      if (tmInt) { clearInterval(tmInt); tmInt = null }
+      let h = '<div class="step" id="cs">';
+      switch (step.type) {
+        case 'intro': h += rIntro(step); break;
+        case 'single': h += rSingle(step); break;
+        case 'yesno': h += rYesNo(step); break;
+        case 'scale': h += rScale(step); break;
+        case 'multi': h += rMulti(step); break;
+        case 'reveal': h += rReveal(step); break;
+        case 'loading': h += rLoading(step); break;
+        case 'results': h += rResults(); break;
+        case 'testimonials': h += rTest(step); break;
+        case 'solution': h += rSol(step); break;
+        case 'features': h += rFeat(step); break;
+        case 'bonuses': h += rBonus(step); break;
+        case 'price': h += rPrice(); break;
+        case 'guarantee': h += rGuar(); break;
+        case 'cta': h += rCta(); break;
+      }
+      h += '</div>'; ctr.innerHTML = h;
+      requestAnimationFrame(() => { const e = document.getElementById('cs'); if (e) e.classList.add('active') });
+      if (step.type === 'reveal') setTimeout(() => { const e = document.querySelector('.stn'); if (e) e.classList.add('an') }, 300);
+      if (step.type === 'loading') runLoad(step);
+      if (step.type === 'results') setTimeout(animGauge, 500);
+      if (step.type === 'features') animFeat();
+      if (step.type === 'bonuses') animBon();
+      if (step.type === 'testimonials') startCarousel();
+      if (step.type === 'cta') startTimer();
+    }
+
+    function rIntro(s) { return `<span class="si fiu">${s.icon}</span><h1 class="st fiu d1">${s.title}</h1><p class="ss fiu d2">${s.sub}</p><div class="fiu d3" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:12px"><button class="cta" onclick="next()">${s.btn}</button><span style="font-size:11px;color:var(--text2)">🔒 100% confidential · Takes 2 minutes</span></div>` }
+
+    function rSingle(s) { let o = s.opts.map((x, i) => `<div class="oc fiu d${i + 1}" data-tp="single" data-k="${s.k}" data-v="${esc(x.t)}"><span class="oi">${x.i}</span><span>${x.t}</span><span class="cc"></span></div>`).join(''); return `<h2 class="st fiu" style="font-size:20px">${s.q}</h2>${s.sub ? `<p class="ss fiu d1">${s.sub}</p>` : '<div style="height:12px"></div>'}<div class="og">${o}</div>` }
+
+    function rYesNo(s) { return `<h2 class="st fiu" style="font-size:20px">${s.q}</h2>${s.sub ? `<p class="ss fiu d1">${s.sub}</p>` : '<div style="height:12px"></div>'}<div class="yng fiu d2"><button class="ynb" data-tp="yn" data-k="${s.k}" data-v="yes">👍 Yes</button><button class="ynb" data-tp="yn" data-k="${s.k}" data-v="no">👎 No</button></div>` }
+
+    function rScale(s) { let d = ''; for (let i = 1; i <= 10; i++)d += `<div class="sc-d" data-tp="sc" data-k="${s.k}" data-v="${i}">${i}</div>`; return `<h2 class="st fiu" style="font-size:20px">${s.q}</h2>${s.sub ? `<p class="ss fiu d1">${s.sub}</p>` : '<div style="height:12px"></div>'}<div class="sc-c fiu d2"><div class="sc-t">${d}</div><div class="sc-l"><span>${s.lo}</span><span>${s.hi}</span></div></div>` }
+
+    function rMulti(s) { let o = s.opts.map((x, i) => `<div class="oc fiu d${i + 1}" data-tp="multi" data-k="${s.k}" data-v="${esc(x.t)}"><span class="oi">${x.i}</span><span>${x.t}</span><span class="cb"></span></div>`).join(''); return `<h2 class="st fiu" style="font-size:20px">${s.q}</h2>${s.sub ? `<p class="ss fiu d1">${s.sub}</p>` : '<div style="height:12px"></div>'}<div class="og">${o}</div><button class="cnt" id="mc" onclick="next()">${s.btn || 'Continue'}</button>` }
+
+    function rReveal(s) { return `<span class="si fiu">${s.icon}</span><div class="stn">${s.stat}</div><p class="ss" style="margin-bottom:12px;font-size:16px;color:var(--text);font-weight:500">${s.txt}</p><p class="ss" style="margin-bottom:8px">${s.det}</p><span style="font-size:11px;color:var(--text2);font-style:italic">${s.src}</span><button class="acnt" onclick="next()" style="margin-top:28px">Continue →</button>` }
+
+    function rLoading(s) { return `<div class="lc"><div class="lr"></div><p class="lt" id="ldt">${s.msgs[0]}</p><div class="lp"><div class="lpf" id="ldf" style="width:0%"></div></div></div>` }
+
+    function rResults() {
+      const sc = calcScore(), co = sColor(sc), la = sLabel(sc);
+      const cf = Math.min(100, (ans.confidence || 5) * 10);
+      let kn = 30; if (ans.knowSpots === 'yes') kn += 30; const z = ans.zones || ''; if (z.includes('6')) kn = 90; else if (z.includes('4')) kn = 60; else if (z.includes('2')) kn = 40;
+      let te = 35; if (ans.fullBody === 'yes') te += 30; const o = ans.orgFreq || ''; if (o.includes('Every')) te = 90; else if (o.includes('Most')) te = 65; else if (o.includes('half')) te = 45;
+      let cn = 50; const ii = ans.initiation || ''; if (ii.includes('Very')) cn = 85; else if (ii.includes('Often')) cn = 70; else if (ii.includes('never')) cn = 25; else if (ii.includes('Rarely')) cn = 35;
+      return `<span class="si fiu">📋</span><h2 class="st fiu d1" style="font-size:20px">Your Intimate Performance Score</h2><div class="gc fiu d2"><div class="gbg" id="gbg"><div class="gin"><div class="gscore" id="gsc" style="color:${co}">0</div><div class="glbl">${la}</div></div></div></div><div class="bd fiu d3"><div class="bi"><span class="bl">Confidence</span><div class="bbr"><div class="bfl" id="bf1" style="width:0%;background:${sColor(cf)}"></div></div><span class="bv">${cf}%</span></div><div class="bi"><span class="bl">Anatomy Knowledge</span><div class="bbr"><div class="bfl" id="bf2" style="width:0%;background:${sColor(kn)}"></div></div><span class="bv">${kn}%</span></div><div class="bi"><span class="bl">Technique Mastery</span><div class="bbr"><div class="bfl" id="bf3" style="width:0%;background:${sColor(te)}"></div></div><span class="bv">${te}%</span></div><div class="bi"><span class="bl">Partner Satisfaction</span><div class="bbr"><div class="bfl" id="bf4" style="width:0%;background:${sColor(cn)}"></div></div><span class="bv">${cn}%</span></div></div><p class="ss fiu d4" style="font-size:13px">Based on your answers, there are <strong style="color:var(--accent)">significant areas for improvement</strong>. The good news? Every single one can be fixed with the right guidance.</p><button class="cta fiu d5" onclick="next()">See How to Improve My Score →</button>`
+    }
+
+    function rTest(s) {
+      let dots = s.items.map((_, i) => `<div class="td${i === 0 ? ' act' : ''}" id="td${i}"></div>`).join('');
+      let cards = s.items.map((x, i) => `<div class="tc" id="tc${i}" style="display:${i === 0 ? 'block' : 'none'}"><div class="ts">${'★'.repeat(x.s)}</div><p class="tt">${x.t}</p><p class="ta">— ${x.a}</p></div>`).join('');
+      return `<span class="si fiu">💬</span><h2 class="st fiu d1" style="font-size:20px">${s.title}</h2><p class="ss fiu d2">Over 30,000 men have already transformed their intimate lives.</p><div class="fiu d3" style="width:100%">${cards}<div class="tds">${dots}</div></div><button class="acnt fiu d4" onclick="next()">Continue →</button>`
+    }
+
+    function rSol(s) {
+      let st = s.stats.map((x, i) => `<div style="text-align:center" class="fiu d${i + 2}"><div style="font-size:28px;font-weight:900" class="gt">${x.v}</div><div style="font-size:11px;color:var(--text2);margin-top:2px">${x.l}</div></div>`).join('');
+      return `<span class="si fiu">🏆</span><h2 class="st fiu d1" style="font-size:20px">Your Personalized Solution</h2><div style="margin:16px 0;padding:16px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);width:100%" class="fiu d2"><h3 style="font-size:22px;font-weight:800;text-align:center;margin-bottom:4px" class="gt">${s.name}</h3><p style="font-size:12px;color:var(--text2);text-align:center">by Roxy Fox — Certified Sexologist</p></div><p class="ss fiu d2" style="font-size:13px">${s.sub}</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;width:100%;margin:8px 0 24px">${st}</div><button class="cta fiu d5" onclick="next()">Show Me What's Inside →</button>`
+    }
+
+    function rFeat(s) {
+      let f = s.feats.map((x, i) => `<div class="fc" id="ft${i}"><span class="fi">${x.i}</span><div><div class="fti">${x.t}</div><div class="fd">${x.d}</div></div></div>`).join('');
+      return `<h2 class="st fiu" style="font-size:20px">${s.title}</h2><div style="height:8px"></div><div class="og">${f}</div><button class="acnt" onclick="next()" style="margin-top:20px">See the Bonuses →</button>`
+    }
+
+    function rBonus(s) {
+      let b = s.bns.map((x, i) => `<div class="bc" id="bn${i}"><div class="bh"><span class="bbdg">${x.b}</span><span class="bval">${x.v}</span><span style="font-size:12px;color:#22c55e;font-weight:700;margin-left:4px">FREE</span></div><div class="btl">${x.t}</div><div class="bdc">${x.d}</div></div>`).join('');
+      return `<span class="si fiu">🎁</span><h2 class="st fiu d1" style="font-size:20px">${s.title}</h2><p class="ss fiu d1">${s.sub}</p><div class="og">${b}</div><div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text2)" class="fiu d2">Total bonus value: <strong style="color:var(--accent);text-decoration:line-through">$541</strong> — <strong style="color:#22c55e">yours FREE today</strong></div><button class="acnt" onclick="next()" style="margin-top:16px">See the Special Price →</button>`
+    }
+
+    function rPrice() { return `<span class="si fiu">💰</span><h2 class="st fiu d1" style="font-size:20px">Exclusive Offer for <span class="gt">Quiz Participants</span></h2><p class="ss fiu d2">Based on your results, you qualify for the maximum discount available today.</p><div class="ps fiu d3"><div class="po">$1,000</div><div class="po" style="font-size:16px">$497</div><div class="pc">$49</div><div class="pp">One-time payment · Lifetime access</div><div class="pdy">That's less than $0.15/day</div></div><div style="width:100%;text-align:left;margin:12px 0" class="fiu d4"><div style="font-size:13px;font-weight:600;margin-bottom:8px">Everything included:</div><div style="font-size:12px;color:var(--text2);line-height:2.2">✅ Complete Secrets of Orgasm Program<br>✅ Bonus 1: Live Masterclass ($97 value)<br>✅ Bonus 2: Unlocking the Female Mind ($147 value)<br>✅ Bonus 3: Sexual Obsession System ($297 value)<br>✅ 60-Day Money-Back Guarantee</div></div><div style="font-size:14px;font-weight:700;text-align:center;color:var(--text2);margin:8px 0" class="fiu d5">Total value: <span style="text-decoration:line-through">$1,538</span> → <span style="color:#22c55e">You pay: $49</span></div><button class="acnt fiu d5" onclick="next()">Continue →</button>` }
+
+    function rGuar() { return `<span class="si fiu" style="font-size:64px">🛡️</span><h2 class="st fiu d1" style="font-size:20px">Zero Risk — <span class="gt">60-Day Guarantee</span></h2><p class="ss fiu d2">Try the entire program for 60 days. Watch the lessons. Apply the techniques. If you don't feel it was worth every penny, get a full refund — no questions asked.</p><div class="gb fiu d3"><span class="gbi">✅</span><div class="gbt"><strong>100% money back</strong> within 60 days. Even if you refund, you <strong>keep all 3 bonuses</strong> forever as a thank you.</div></div><div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:16px" class="fiu d4"><div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)"><span>🔒</span> Bank-level encryption protects your data</div><div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)"><span>👁️</span> Discreet billing — no one will know</div><div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)"><span>📱</span> Instant access on any device</div></div><button class="cta fiu d5" onclick="next()">I'm Ready — Show Me the Final Step →</button>` }
+
+    function rCta() { return `<span class="si fiu" style="font-size:52px">🔥</span><h2 class="st fiu d1" style="font-size:22px">Your Spot Is <span class="gt">Reserved</span></h2><p class="ss fiu d2">This special price expires when the timer hits zero. After that, it goes back to $497.</p><div class="tmc fiu d3" id="tmc"><div class="tmb"><div class="tmv" id="tmm">14</div><div class="tml">Minutes</div></div><div style="font-size:24px;font-weight:800;color:var(--text2);padding-top:8px">:</div><div class="tmb"><div class="tmv" id="tms">59</div><div class="tml">Seconds</div></div></div><a href="https://explodely.com/p/504374488" target="_blank" rel="noopener" class="cta pulse fiu d4" style="font-size:18px;padding:20px 32px">UNLOCK FULL ACCESS — $49</a><div class="tbg fiu d5"><div class="tbgi">🔒 Secure</div><div class="tbgi">🛡️ 60-Day Guarantee</div><div class="tbgi">👁️ 100% Discreet</div></div><p style="font-size:11px;color:var(--text2);text-align:center;margin-top:20px;line-height:1.6" class="fiu d6">Immediate access after purchase. Works on any device.<br>Your statement will show a generic, discreet name.</p>` }
+
+    function esc(s) { return s.replace(/"/g, '&quot;').replace(/'/g, '&#39;') }
+
+    document.addEventListener('click', function (e) {
+      const si = e.target.closest('[data-tp="single"]');
+      if (si) { ans[si.dataset.k] = si.dataset.v; document.querySelectorAll('[data-tp="single"]').forEach(c => c.classList.remove('sel')); si.classList.add('sel'); setTimeout(next, 500); return }
+      const yn = e.target.closest('[data-tp="yn"]');
+      if (yn) { ans[yn.dataset.k] = yn.dataset.v; setTimeout(next, 400); return }
+      const sc = e.target.closest('[data-tp="sc"]');
+      if (sc) { ans[sc.dataset.k] = parseInt(sc.dataset.v); document.querySelectorAll('.sc-d').forEach(d => d.classList.remove('act')); sc.classList.add('act'); setTimeout(next, 600); return }
+      const mi = e.target.closest('[data-tp="multi"]');
+      if (mi) { const k = mi.dataset.k, v = mi.dataset.v; if (!ans[k]) ans[k] = []; if (mi.classList.contains('sel')) { mi.classList.remove('sel'); ans[k] = ans[k].filter(x => x !== v) } else { mi.classList.add('sel'); ans[k].push(v) } const b = document.getElementById('mc'); if (b) b.classList.toggle('en', ans[k].length > 0); return }
+    });
+
+    function next() {
+      const el = document.getElementById('cs');
+      if (el) { el.classList.remove('active'); el.classList.add('exit') }
+      setTimeout(() => { cs++; if (cs < S.length) render(cs) }, 350);
+    }
+
+    function runLoad(s) {
+      const msgs = s.msgs; let p = 0, mi = 0; const dur = 4500, iv = 50, inc = 100 / (dur / iv);
+      const li = setInterval(() => {
+        p += inc; const fl = document.getElementById('ldf'), tx = document.getElementById('ldt');
+        if (fl) fl.style.width = Math.min(p, 100) + '%';
+        const nm = Math.floor((p / 100) * msgs.length);
+        if (nm !== mi && nm < msgs.length) { mi = nm; if (tx) { tx.style.opacity = 0; setTimeout(() => { if (tx) { tx.textContent = msgs[mi]; tx.style.opacity = 1 } }, 200) } }
+        if (p >= 100) { clearInterval(li); setTimeout(next, 500) }
+      }, iv);
+    }
+
+    function animGauge() {
+      const sc = calcScore(), co = sColor(sc), se = document.getElementById('gsc'), bg = document.getElementById('gbg');
+      if (!se || !bg) return; let c = 0;
+      const ai = setInterval(() => { c++; if (c > sc) { clearInterval(ai); return } se.textContent = c; bg.style.background = 'conic-gradient(' + co + ' 0deg,' + co + ' ' + (c / 100 * 360) + 'deg,rgba(255,255,255,0.04) ' + (c / 100 * 360) + 'deg)' }, 20);
+      setTimeout(() => { ['bf1', 'bf2', 'bf3', 'bf4'].forEach(id => { const el = document.getElementById(id); if (el) { const pr = el.closest('.bi'), vl = pr?.querySelector('.bv'); if (vl) el.style.width = vl.textContent } }) }, 600);
+    }
+
+    function animFeat() { document.querySelectorAll('.fc').forEach((c, i) => setTimeout(() => c.classList.add('vis'), 150 * (i + 1))) }
+    function animBon() { document.querySelectorAll('.bc').forEach((c, i) => setTimeout(() => c.classList.add('vis'), 300 * (i + 1))) }
+
+    function startCarousel() {
+      let c = 0; const n = 4;
+      tInt = setInterval(() => {
+        const oc = document.getElementById('tc' + c), od = document.getElementById('td' + c);
+        if (oc) oc.style.display = 'none'; if (od) od.classList.remove('act');
+        c = (c + 1) % n;
+        const nc = document.getElementById('tc' + c), nd = document.getElementById('td' + c);
+        if (nc) nc.style.display = 'block'; if (nd) nd.classList.add('act');
+      }, 3500);
+    }
+
+    function startTimer() {
+      let m = 14, s = 59;
+      tmInt = setInterval(() => {
+        s--; if (s < 0) { s = 59; m-- } if (m < 0) { clearInterval(tmInt); return }
+        const me = document.getElementById('tmm'), se = document.getElementById('tms');
+        if (me) me.textContent = String(m).padStart(2, '0');
+        if (se) se.textContent = String(s).padStart(2, '0');
+      }, 1000);
+    }
+
+    render(0);
+  </script>
+</body>
+
+</html>
