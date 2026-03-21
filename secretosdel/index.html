@@ -1,21 +1,9 @@
-<!DOCTYPE html><html lang="es"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
-
-  <script>
-  window.pixelId = "69be120fbdae252f425e74d0";
-  var a = document.createElement("script");
-  a.setAttribute("async", "");
-  a.setAttribute("defer", "");
-  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-  document.head.appendChild(a);
-</script>
 
   <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
   <link rel="preload" href="https://scripts.converteai.net/cda0fd17-3b99-44d2-a83a-fc66435cb2df/ab-test/69be0d6d1107eefdea7e80b9/player.js" as="script">
@@ -26,44 +14,48 @@
   <link rel="dns-prefetch" href="https://m3u8.vturb.net">
   <link rel="dns-prefetch" href="https://api.vturb.com.br">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+  window.pixelId = "69be120fbdae252f425e74d0";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+
   <style>
     :root {
       --bg1: #3a0000;
       --bg2: #5b0000;
       --bg3: #1b0000;
       --text: #ffffff;
-      --muted: rgba(255, 255, 255, .82);
-      --muted2: rgba(255, 255, 255, .68);
-      --accent: #ff1f2d;
+      --muted: rgba(255,255,255,.82);
+      --muted2: rgba(255,255,255,.68);
       --yellow: #e6b325;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
+    * { box-sizing: border-box; }
+    html, body {
       min-height: 100%;
+      visibility: visible !important;
+      overflow: auto !important;
     }
-
-    html {
-      background: var(--bg3);
-    }
-
+    html { background: var(--bg3); }
     body {
       margin: 0;
       min-height: 100vh;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color: var(--text);
       background:
-        radial-gradient(900px 420px at 50% 0%, rgba(255, 0, 0, .22), transparent 55%),
-        radial-gradient(1000px 650px at 15% 15%, rgba(255, 90, 90, .16), transparent 60%),
-        radial-gradient(900px 700px at 85% 20%, rgba(255, 0, 0, .12), transparent 62%),
+        radial-gradient(900px 420px at 50% 0%, rgba(255,0,0,.22), transparent 55%),
+        radial-gradient(1000px 650px at 15% 15%, rgba(255,90,90,.16), transparent 60%),
+        radial-gradient(900px 700px at 85% 20%, rgba(255,0,0,.12), transparent 62%),
         linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 40%, var(--bg3) 100%);
       overflow-x: hidden;
     }
-
     .topStrip {
       width: 100%;
       background: var(--yellow);
@@ -74,18 +66,15 @@
       text-align: center;
       padding: 12px;
     }
-
     .wrap {
       max-width: 1100px;
       margin: 0 auto;
       padding: 34px 18px 24px;
     }
-
     .hero {
       text-align: center;
       padding: 10px 10px 26px;
     }
-
     .ratings {
       display: flex;
       align-items: center;
@@ -95,27 +84,17 @@
       font-weight: 700;
       font-size: 14px;
     }
-
-    .stars {
-      color: #f5c518;
-      letter-spacing: 2px;
-    }
-
-    .belowFoldSpacer {
-      height: clamp(60px, 10vh, 160px);
-    }
-
+    .stars { color: #f5c518; letter-spacing: 2px; }
+    .belowFoldSpacer { height: clamp(60px, 10vh, 160px); }
     footer {
-      border-top: 1px solid rgba(255, 255, 255, .1);
-      background: rgba(0, 0, 0, .2);
+      border-top: 1px solid rgba(255,255,255,.1);
+      background: rgba(0,0,0,.2);
     }
-
     .footerWrap {
       max-width: 1100px;
       margin: 0 auto;
       padding: 18px 18px 28px;
     }
-
     .footLinks {
       display: flex;
       justify-content: center;
@@ -123,14 +102,12 @@
       margin-bottom: 10px;
       flex-wrap: wrap;
     }
-
     .footLinks a {
-      color: rgba(255, 255, 255, .82);
+      color: rgba(255,255,255,.82);
       text-decoration: none;
       font-weight: 700;
       font-size: 13px;
     }
-
     .legal {
       max-width: 980px;
       margin: 0 auto;
@@ -141,7 +118,6 @@
     }
   </style>
 </head>
-
 <body>
 
   <div class="topStrip" id="topStrip"></div>
@@ -151,12 +127,12 @@
 
       <vturb-smartplayer id="ab-69be0d6d1107eefdea7e80b9" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
       <script type="text/javascript">
-        var s = document.createElement("script");
-        s.src = "https://scripts.converteai.net/cda0fd17-3b99-44d2-a83a-fc66435cb2df/ab-test/69be0d6d1107eefdea7e80b9/player.js",
-        s.async = !0, document.head.appendChild(s);
+        var s=document.createElement("script");
+        s.src="https://scripts.converteai.net/cda0fd17-3b99-44d2-a83a-fc66435cb2df/ab-test/69be0d6d1107eefdea7e80b9/player.js",
+        s.async=!0,document.head.appendChild(s);
       </script>
 
-      <div class="ratings" aria-label="Calificaciones">
+      <div class="ratings">
         <div class="stars">★★★★★</div>
         <div>4.9 <span style="opacity:.8;font-weight:600">(2,267 Reseñas)</span></div>
       </div>
@@ -168,64 +144,27 @@
 
   <footer>
     <div class="footerWrap">
-
       <nav class="footLinks">
         <a href="#" onclick="return false;">Términos</a>
         <a href="#" onclick="return false;">Política de Privacidad</a>
       </nav>
-
       <p class="legal">
         La información proporcionada en este sitio web es solo con fines informativos generales y proviene de datos disponibles públicamente o de terceros. No garantizamos la exactitud, integridad o vigencia actual de la información mostrada, ni verificamos la titularidad de los números telefónicos. Este sitio web no está afiliado a ningún operador de telecomunicaciones, autoridad gubernamental ni agencia de seguridad. Los usuarios aceptan utilizar este servicio bajo su propia responsabilidad y en cumplimiento de las leyes aplicables, incluidas las regulaciones de protección de datos y tecnología de la información. La información no debe utilizarse para acoso, persecución, difamación ni ninguna actividad ilegal.
-
         <br><br>
         Todos los derechos reservados © 2026
       </p>
-
     </div>
   </footer>
 
   <script>
-
-    (function () {
-
-      const days = [
-        'DOMINGO',
-        'LUNES',
-        'MARTES',
-        'MIÉRCOLES',
-        'JUEVES',
-        'VIERNES',
-        'SÁBADO'
-      ];
-
-      const months = [
-        'ENERO',
-        'FEBRERO',
-        'MARZO',
-        'ABRIL',
-        'MAYO',
-        'JUNIO',
-        'JULIO',
-        'AGOSTO',
-        'SEPTIEMBRE',
-        'OCTUBRE',
-        'NOVIEMBRE',
-        'DICIEMBRE'
-      ];
-
-      const today = new Date();
-
-      const text = `SOLO HOY, ${days[today.getDay()]}, ${today.getDate()} DE ${months[today.getMonth()]}`;
-
-      const el = document.getElementById('topStrip');
-
-      if (el) el.textContent = text;
-
+    (function(){
+      var days=['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
+      var months=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+      var today=new Date();
+      var el=document.getElementById('topStrip');
+      if(el) el.textContent='SOLO HOY, '+days[today.getDay()]+', '+today.getDate()+' DE '+months[today.getMonth()];
     })();
-
   </script>
 
-
-
-
-</body></html>
+</body>
+</html>
