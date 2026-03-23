@@ -1,0 +1,1145 @@
+<!DOCTYPE html><html lang="es"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluación de Rendimiento Íntimo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08080e;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-hover: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #ededf0;
+      --text2: #8888a0;
+      --accent: #8b5cf6;
+      --accent2: #ec4899;
+      --grad: linear-gradient(135deg, #8b5cf6, #ec4899);
+      --r: 14px;
+      --t: 0.35s cubic-bezier(0.4, 0, 0.2, 1)
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15)0%, rgba(236, 72, 153, 0.08)40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0
+    }
+
+    .qc {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 20px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      width: 100%
+    }
+
+    .pw {
+      padding: 16px 0;
+      opacity: 0;
+      transition: opacity .5s
+    }
+
+    .pw.vis {
+      opacity: 1
+    }
+
+    .pi {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--text2);
+      font-weight: 500
+    }
+
+    .pb {
+      width: 100%;
+      height: 4px;
+      background: var(--surface);
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .pf {
+      height: 100%;
+      background: var(--grad);
+      border-radius: 4px;
+      transition: width .6s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%
+    }
+
+    .step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .5s ease, transform .5s ease
+    }
+
+    .step.active {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .step.exit {
+      opacity: 0;
+      transform: translateY(-20px)
+    }
+
+    .si {
+      font-size: 48px;
+      margin-bottom: 20px;
+      display: block
+    }
+
+    .st {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -.5px
+    }
+
+    .gt {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .ss {
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 440px
+    }
+
+    .og {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px
+    }
+
+    .oc {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      cursor: pointer;
+      transition: all var(--t);
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+      user-select: none;
+      position: relative
+    }
+
+    .oc:hover {
+      background: var(--surface-hover);
+      border-color: rgba(139, 92, 246, .3);
+      transform: translateY(-1px)
+    }
+
+    .oc.sel {
+      background: rgba(139, 92, 246, .12);
+      border-color: rgba(139, 92, 246, .5)
+    }
+
+    .oc .oi {
+      font-size: 22px;
+      flex-shrink: 0
+    }
+
+    .oc .cc {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, .15);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--t);
+      margin-left: auto
+    }
+
+    .oc.sel .cc {
+      background: var(--grad);
+      border-color: transparent
+    }
+
+    .oc.sel .cc::after {
+      content: '✓';
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700
+    }
+
+    .oc .cb {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid rgba(255, 255, 255, .15);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--t);
+      margin-left: auto
+    }
+
+    .oc.sel .cb {
+      background: var(--grad);
+      border-color: transparent
+    }
+
+    .oc.sel .cb::after {
+      content: '✓';
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700
+    }
+
+    .yng {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+      margin-top: 8px
+    }
+
+    .ynb {
+      padding: 24px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      cursor: pointer;
+      transition: all var(--t);
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      font-family: inherit
+    }
+
+    .ynb:hover {
+      background: var(--surface-hover);
+      transform: translateY(-2px)
+    }
+
+    .sc-c {
+      width: 100%;
+      margin-top: 16px
+    }
+
+    .sc-t {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap
+    }
+
+    .sc-d {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--t);
+      color: var(--text2)
+    }
+
+    .sc-d:hover {
+      background: var(--surface-hover);
+      transform: scale(1.1)
+    }
+
+    .sc-d.act {
+      background: var(--grad);
+      border-color: transparent;
+      color: #fff;
+      transform: scale(1.15)
+    }
+
+    .sc-l {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text2);
+      padding: 0 4px
+    }
+
+    .stn {
+      font-size: 72px;
+      font-weight: 900;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin: 16px 0;
+      opacity: 0;
+      transform: scale(.5);
+      transition: all .8s cubic-bezier(.34, 1.56, .64, 1)
+    }
+
+    .stn.an {
+      opacity: 1;
+      transform: scale(1)
+    }
+
+    .lc {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px
+    }
+
+    .lr {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--surface);
+      border-top-color: var(--accent);
+      animation: spin 1s linear infinite
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .lt {
+      font-size: 14px;
+      color: var(--text2);
+      transition: opacity .3s
+    }
+
+    .lp {
+      width: 240px;
+      height: 3px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .lpf {
+      height: 100%;
+      background: var(--grad);
+      border-radius: 3px;
+      transition: width .3s
+    }
+
+    .gc {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 24px
+    }
+
+    .gbg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .gin {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center
+    }
+
+    .gscore {
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1
+    }
+
+    .glbl {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px
+    }
+
+    .bd {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0
+    }
+
+    .bi {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px
+    }
+
+    .bl {
+      flex: 1;
+      text-align: left;
+      color: var(--text2)
+    }
+
+    .bbr {
+      width: 120px;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .bfl {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease .5s
+    }
+
+    .bv {
+      width: 35px;
+      text-align: right;
+      font-weight: 600;
+      font-size: 12px
+    }
+
+    .tc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      text-align: left;
+      margin-top: 16px;
+      width: 100%
+    }
+
+    .ts {
+      color: #fbbf24;
+      font-size: 14px;
+      margin-bottom: 10px
+    }
+
+    .tt {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      font-style: italic;
+      margin-bottom: 12px
+    }
+
+    .ta {
+      font-size: 12px;
+      color: var(--text2);
+      font-weight: 600
+    }
+
+    .tds {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px
+    }
+
+    .td {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--surface-hover);
+      transition: all .3s
+    }
+
+    .td.act {
+      background: var(--accent);
+      width: 18px;
+      border-radius: 3px
+    }
+
+    .fc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      text-align: left;
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .4s ease
+    }
+
+    .fc.vis {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .fc .fi {
+      font-size: 24px;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .fc .fti {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .fc .fd {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .bc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      text-align: left;
+      width: 100%;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all .5s ease
+    }
+
+    .bc.vis {
+      opacity: 1;
+      transform: translateX(0)
+    }
+
+    .bh {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px
+    }
+
+    .bbdg {
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--grad);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .5px
+    }
+
+    .bval {
+      font-size: 12px;
+      color: var(--text2);
+      text-decoration: line-through;
+      margin-left: auto
+    }
+
+    .btl {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px
+    }
+
+    .bdc {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .ps {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin: 20px 0
+    }
+
+    .po {
+      font-size: 18px;
+      color: var(--text2);
+      text-decoration: line-through
+    }
+
+    .pc {
+      font-size: 56px;
+      font-weight: 900;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1
+    }
+
+    .pp {
+      font-size: 14px;
+      color: var(--text2)
+    }
+
+    .pdy {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 4px
+    }
+
+    .cta {
+      width: 100%;
+      padding: 18px 32px;
+      background: var(--grad);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--t);
+      position: relative;
+      overflow: hidden;
+      margin-top: 16px;
+      letter-spacing: .3px;
+      display: block;
+      text-align: center;
+      text-decoration: none
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(139, 92, 246, .3)
+    }
+
+    .cta::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .15), transparent);
+      animation: shimmer 2.5s infinite
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%
+      }
+
+      100% {
+        left: 100%
+      }
+    }
+
+    .cnt {
+      width: 100%;
+      padding: 16px 32px;
+      background: var(--grad);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--t);
+      margin-top: 20px;
+      opacity: .4;
+      pointer-events: none
+    }
+
+    .cnt.en {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    .cnt.en:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, .25)
+    }
+
+    .acnt {
+      width: 100%;
+      padding: 16px 32px;
+      background: var(--grad);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--t);
+      margin-top: 24px
+    }
+
+    .acnt:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, .25)
+    }
+
+    .tmc {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 16px 0
+    }
+
+    .tmb {
+      display: flex;
+      flex-direction: column;
+      align-items: center
+    }
+
+    .tmv {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 24px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      min-width: 56px;
+      text-align: center
+    }
+
+    .tml {
+      font-size: 9px;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px
+    }
+
+    .gb {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid rgba(34, 197, 94, .2);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      width: 100%;
+      text-align: left;
+      margin: 16px 0
+    }
+
+    .gbi {
+      font-size: 36px;
+      flex-shrink: 0
+    }
+
+    .gbt {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .gbt strong {
+      color: #22c55e
+    }
+
+    .tbg {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+      flex-wrap: wrap
+    }
+
+    .tbgi {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text2)
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.03)
+      }
+    }
+
+    .pulse {
+      animation: pulse 2s ease-in-out infinite
+    }
+
+    @keyframes fiu {
+      from {
+        opacity: 0;
+        transform: translateY(15px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .fiu {
+      animation: fiu .5s ease forwards
+    }
+
+    .d1 {
+      animation-delay: .1s;
+      opacity: 0
+    }
+
+    .d2 {
+      animation-delay: .2s;
+      opacity: 0
+    }
+
+    .d3 {
+      animation-delay: .3s;
+      opacity: 0
+    }
+
+    .d4 {
+      animation-delay: .4s;
+      opacity: 0
+    }
+
+    .d5 {
+      animation-delay: .5s;
+      opacity: 0
+    }
+
+    .d6 {
+      animation-delay: .6s;
+      opacity: 0
+    }
+
+    .d7 {
+      animation-delay: .7s;
+      opacity: 0
+    }
+
+    .d8 {
+      animation-delay: .8s;
+      opacity: 0
+    }
+
+    @media(max-width:480px) {
+      .st {
+        font-size: 22px
+      }
+
+      .sc-d {
+        width: 32px;
+        height: 32px;
+        font-size: 12px
+      }
+
+      .pc {
+        font-size: 46px
+      }
+
+      .stn {
+        font-size: 56px
+      }
+
+      .tmv {
+        font-size: 20px;
+        min-width: 48px;
+        padding: 8px 10px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-glow"></div>
+  <div class="qc">
+    <div class="pw" id="pw">
+      <div class="pi"><span id="si">Paso 1 de 31</span><span id="pci">0%</span></div>
+      <div class="pb">
+        <div class="pf" id="pfl"></div>
+      </div>
+    </div>
+    <div id="sc"></div>
+  </div>
+
+  <script>
+    let cs = 0, ans = {}, tInt = null, tmInt = null;
+    const S = [
+      { type: 'intro', icon: '🔥', title: '¿Qué tan bien la <span class="gt">satisfaces realmente</span>?', sub: 'Realiza esta evaluación confidencial de 2 minutos diseñada por una sexóloga certificada. Descubre tu puntuación de rendimiento íntimo y qué puedes mejorar.', btn: 'Comenzar Mi Evaluación →' },
+      { type: 'single', q: '¿Cuál es tu rango de edad?', sub: 'Esto nos ayuda a personalizar tus resultados.', opts: [{ i: '👤', t: '18 – 25' }, { i: '👤', t: '26 – 35' }, { i: '👤', t: '36 – 45' }, { i: '👤', t: '46 – 55' }, { i: '👤', t: '56+' }], k: 'age' },
+      { type: 'single', q: '¿Cuál es tu estado sentimental actual?', sub: 'Tu situación afecta el enfoque recomendado.', opts: [{ i: '💚', t: 'Soltero' }, { i: '💛', t: 'Saliendo casualmente' }, { i: '🧡', t: 'En una relación' }, { i: '❤️', t: 'Casado' }, { i: '💔', t: 'Es complicado' }], k: 'status' },
+      { type: 'single', q: '¿Cuánto tiempo con tu pareja actual o más reciente?', sub: '', opts: [{ i: '📅', t: 'Menos de 6 meses' }, { i: '📅', t: '6 – 12 meses' }, { i: '📅', t: '1 – 3 años' }, { i: '📅', t: '3 – 5 años' }, { i: '📅', t: '5+ años' }], k: 'duration' },
+      { type: 'scale', q: 'En una escala del 1 al 10, ¿qué tan seguro estás de tu rendimiento sexual?', sub: 'Sé completamente honesto — esto es 100% privado.', lo: 'Nada seguro', hi: 'Muy seguro', k: 'confidence' },
+      { type: 'yesno', q: '¿Alguna vez pensaste durante el sexo: "¿Realmente lo estoy haciendo bien?"', sub: 'Casi todos los hombres lo han pensado. Sin juicios aquí.', k: 'worry' },
+      { type: 'yesno', q: '¿Tu pareja alguna vez dijo "estuvo genial" pero no estabas 100% seguro de que lo decía en serio?', sub: '', k: 'trust' },
+      { type: 'reveal', icon: '📊', stat: '67%', txt: 'de las mujeres han admitido fingir placer para proteger los sentimientos de su pareja.', det: 'Las mujeres están socialmente condicionadas a decir lo que los hombres quieren escuchar. La verdad es: la mayoría de los hombres no tienen idea si ella está realmente satisfecha.', src: 'Basado en investigación clínica en psicología sexual' },
+      { type: 'single', q: '¿Con qué frecuencia tu pareja inicia el sexo?', sub: 'Una pareja que inicia con frecuencia es una señal fuerte de satisfacción.', opts: [{ i: '❌', t: 'Casi nunca' }, { i: '😐', t: 'Raramente' }, { i: '🔄', t: 'A veces' }, { i: '😊', t: 'A menudo' }, { i: '🔥', t: 'Muy a menudo' }], k: 'initiation' },
+      { type: 'multi', q: '¿En qué áreas te sientes MENOS seguro?', sub: 'Selecciona todas las que apliquen.', opts: [{ i: '👅', t: 'Técnica de sexo oral' }, { i: '🔄', t: 'Habilidades de penetración' }, { i: '💋', t: 'Preliminares y provocación' }, { i: '💥', t: 'Hacerla llegar al orgasmo' }, { i: '⏱️', t: 'Durar lo suficiente' }, { i: '🤷', t: 'Saber qué quiere ella' }], k: 'weakAreas', btn: 'Continuar' },
+      { type: 'yesno', q: '¿Sabes qué son el punto A, el punto C y el punto K femeninos?', sub: 'La mayoría de los hombres solo conocen el punto G. Pero hay mucho más.', k: 'knowSpots' },
+      { type: 'single', q: '¿Cuántas zonas de placer femeninas podrías localizar con confianza ahora mismo?', sub: '', opts: [{ i: '1️⃣', t: '0 – 1 zonas' }, { i: '2️⃣', t: '2 – 3 zonas' }, { i: '3️⃣', t: '4 – 5 zonas' }, { i: '🌟', t: '6 o más' }], k: 'zones' },
+      { type: 'reveal', icon: '🗺️', stat: '7+', txt: 'zonas de placer primarias existen que la mayoría de los hombres ni siquiera conocen.', det: 'El punto G es solo el comienzo. El punto U, punto A, punto C, punto K y otras zonas de activación son donde el verdadero placer se desbloquea.', src: 'Mapeo clínico de la anatomía erógena femenina' },
+      { type: 'multi', q: '¿Dónde aprendiste la mayor parte de lo que sabes sobre sexo?', sub: 'Selecciona todas las que apliquen.', opts: [{ i: '📱', t: 'Pornografía' }, { i: '🗣️', t: 'Amigos y conversaciones' }, { i: '🛏️', t: 'Experiencia personal' }, { i: '📚', t: 'Libros o artículos' }, { i: '💬', t: 'Retroalimentación de pareja' }, { i: '🏫', t: 'Educación formal' }], k: 'sources', btn: 'Continuar' },
+      { type: 'yesno', q: '¿Crees que la pornografía muestra con precisión lo que las mujeres disfrutan en la cama?', sub: '', k: 'pornBelief' },
+      { type: 'reveal', icon: '⚠️', stat: '91%', txt: 'de la pornografía convencional muestra actos que las mujeres reportan como incómodos en la vida real.', det: 'El porno está diseñado para verse bien en cámara, no para enseñar técnica real. Lo que parece placentero a menudo es exactamente lo opuesto para las mujeres.', src: 'Investigación sobre influencia de medios y comportamiento sexual' },
+      { type: 'single', q: '¿El interés de tu pareja en el sexo ha disminuido con el tiempo?', sub: 'Esto es más común de lo que piensas — y generalmente tiene solución.', opts: [{ i: '📉', t: 'Sí, notablemente' }, { i: '↘️', t: 'Un poco' }, { i: '➡️', t: 'Se mantuvo igual' }, { i: '📈', t: 'En realidad aumentó' }, { i: '❓', t: 'No estoy seguro' }], k: 'decreased' },
+      { type: 'single', q: '¿Con qué frecuencia tu pareja llega al orgasmo durante el sexo?', sub: 'Sé completamente honesto — esto es crucial para tu evaluación.', opts: [{ i: '😔', t: 'Casi nunca' }, { i: '😕', t: 'Raramente (menos del 25%)' }, { i: '😐', t: 'Aproximadamente la mitad' }, { i: '😊', t: 'La mayoría de las veces (75%+)' }, { i: '🤩', t: 'Siempre' }], k: 'orgFreq' },
+      { type: 'yesno', q: '¿Alguna vez le diste a una mujer un orgasmo poderoso de cuerpo completo?', sub: 'Del tipo en que pierde el control, tiembla y apenas puede hablar.', k: 'fullBody' },
+      { type: 'reveal', icon: '💡', stat: '100%', txt: 'de los hombres pueden aprender a darle a las mujeres orgasmos múltiples e intensos — sin importar el tamaño o la resistencia.', det: 'La investigación clínica confirma que se trata de técnica, no de anatomía. El conocimiento correcto lo cambia todo.', src: 'Estudios de sexología clínica sobre el orgasmo femenino' },
+      { type: 'multi', q: '¿Qué cambiaría si pudieras GARANTIZAR su placer cada vez?', sub: 'Selecciona todas las que apliquen.', opts: [{ i: '💪', t: 'Más confianza' }, { i: '❤️', t: 'Relación más fuerte' }, { i: '🔥', t: 'Ella iniciaría más' }, { i: '🤝', t: 'Conexión emocional más profunda' }, { i: '👑', t: 'Ella me vería diferente' }, { i: '😌', t: 'Mi autoestima se dispararía' }], k: 'impact', btn: 'Continuar' },
+      { type: 'scale', q: '¿Qué tan importante es para ti mejorar tus habilidades íntimas AHORA MISMO?', sub: '', lo: 'No urgente', hi: 'Extremadamente urgente', k: 'importance' },
+      { type: 'single', q: 'Si una sexóloga pudiera enseñarte paso a paso cómo darle a cualquier mujer el mejor orgasmo de su vida — ¿te interesaría?', sub: '', opts: [{ i: '✅', t: 'Absolutamente sí' }, { i: '🤔', t: 'Tengo curiosidad por saber más' }, { i: '🔍', t: 'Ya estoy buscando esto' }], k: 'commit' },
+      { type: 'loading', msgs: ['Analizando tus respuestas...', 'Calculando tu puntuación de rendimiento...', 'Mapeando tus áreas de mejora...', 'Identificando oportunidades clave...', 'Generando recomendaciones personalizadas...', 'Finalizando tu informe...'] },
+      { type: 'results' },
+      { type: 'testimonials', title: 'Hombres Como Tú Ya Cambiaron Sus Vidas', items: [{ t: '"Ayer probamos algunas técnicas y hoy la cama está completamente empapada. Mi novia nunca había reaccionado así."', a: 'Marcos T., 34', s: 5 }, { t: '"Mi esposa squirteó unas siete veces hoy. En cinco años de matrimonio, nunca había visto esa cara de pura felicidad después del sexo."', a: 'Jaime R., 41', s: 5 }, { t: '"Nunca pensé que fuera posible hacer que una mujer terminara usando solo mis dedos. Lo apliqué ayer y fue absolutamente una locura."', a: 'David K., 28', s: 5 }, { t: '"Lo accedí desde mi teléfono, y en la primera lección entendí dónde estaba fallando. Mi matrimonio es completamente diferente ahora."', a: 'Roberto S., 45', s: 5 }] },
+      { type: 'solution', name: 'Secretos del Orgasmo', sub: 'Un sistema completo paso a paso creado por la sexóloga Roxy Fox, con 10 años de experiencia clínica y 28 técnicas comprobadas.', stats: [{ v: '30,000+', l: 'Estudiantes en el mundo' }, { v: '28', l: 'Técnicas comprobadas' }, { v: '10', l: 'Años de investigación' }] },
+      { type: 'features', title: 'Lo Que Dominarás Dentro', feats: [{ i: '🗺️', t: 'Mapeo de Zonas de Placer', d: 'Localiza y estimula las 7+ zonas: punto G, punto A, punto U, punto C, punto K y áreas ocultas de activación.' }, { i: '🖐️', t: 'Técnicas Avanzadas con los Dedos', d: 'Los movimientos exactos, ángulos y presión que la hacen perder el control en minutos.' }, { i: '👅', t: 'Dominio del Sexo Oral', d: '4 técnicas con la lengua que la volverán adicta. Las mujeres enloquecen con el movimiento #3.' }, { i: '🔄', t: 'Sistema de Posiciones Ideales', d: 'Posiciones ideales basadas en TU anatomía para la máxima estimulación.' }, { i: '🧠', t: 'Psicología Femenina Decodificada', d: 'Entiende lo que ella secretamente desea pero nunca te dirá.' }, { i: '💦', t: 'El Método del Squirt', d: 'Guía paso a paso para la liberación de cuerpo completo más intensa que ella haya experimentado.' }] },
+      { type: 'bonuses', title: '3 Bonos Exclusivos — GRATIS', sub: 'Solo para quienes se unan hoy.', bns: [{ b: 'BONO 1', t: 'Masterclass en Vivo con Roxy Fox', d: '3 técnicas avanzadas secretas demostradas en vivo, incluyendo métodos indoloros para expandir tu repertorio.', v: '$97' }, { b: 'BONO 2', t: 'Desbloqueando la Mente Femenina', d: 'Descubre sus fantasías ocultas que nunca le ha contado a nadie. Crea un ambiente donde ella se entregue completamente.', v: '$147' }, { b: 'BONO 3', t: 'Cómo Volverla Sexualmente Obsesionada', d: '5 posiciones prohibidas, 3 puntos de contacto secretos, 7 mensajes magnéticos que la vuelven loca todo el día.', v: '$297' }] },
+      { type: 'price' },
+      { type: 'guarantee' },
+      { type: 'cta' }
+    ];
+
+    function calcScore() {
+      let s = 50;
+      const c = ans.confidence || 5; s += (c - 5) * 2;
+      if (ans.worry === 'yes') s -= 5;
+      if (ans.trust === 'yes') s -= 5;
+      const im = ans.initiation || '';
+      if (im.includes('nunca')) s -= 10; else if (im.includes('Raramente')) s -= 5; else if (im.includes('menudo') && !im.includes('Muy')) s += 5; else if (im.includes('Muy')) s += 10;
+      if (ans.knowSpots === 'no') s -= 8;
+      const z = ans.zones || '';
+      if (z.includes('0')) s -= 10; else if (z.includes('2')) s -= 5; else if (z.includes('6')) s += 5;
+      const o = ans.orgFreq || '';
+      if (o.includes('nunca')) s -= 15; else if (o.includes('Raramente')) s -= 10; else if (o.includes('mitad')) s -= 3; else if (o.includes('mayoría')) s += 3; else if (o.includes('Siempre')) s += 8;
+      if (ans.fullBody === 'no') s -= 5;
+      const d = ans.decreased || '';
+      if (d.includes('notablemente')) s -= 8; else if (d.includes('poco')) s -= 4; else if (d.includes('aumentó')) s += 5;
+      return Math.max(12, Math.min(85, s));
+    }
+    function sColor(s) { return s < 30 ? '#ef4444' : s < 50 ? '#f97316' : s < 70 ? '#eab308' : '#22c55e' }
+    function sLabel(s) { return s < 30 ? 'Necesita Mejorar' : s < 50 ? 'Por Debajo del Promedio' : s < 70 ? 'Promedio' : 'Por Encima del Promedio' }
+
+    function render(idx) {
+      const step = S[idx], ctr = document.getElementById('sc'), pw = document.getElementById('pw');
+      if (step.type === 'intro') { pw.classList.remove('vis') } else { pw.classList.add('vis'); const p = Math.round((idx / (S.length - 1)) * 100); document.getElementById('pfl').style.width = p + '%'; document.getElementById('si').textContent = 'Paso ' + idx + ' de ' + (S.length - 1); document.getElementById('pci').textContent = p + '%' }
+      if (tInt) { clearInterval(tInt); tInt = null }
+      if (tmInt) { clearInterval(tmInt); tmInt = null }
+      let h = '<div class="step" id="cs">';
+      switch (step.type) {
+        case 'intro': h += rIntro(step); break;
+        case 'single': h += rSingle(step); break;
+        case 'yesno': h += rYesNo(step); break;
+        case 'scale': h += rScale(step); break;
+        case 'multi': h += rMulti(step); break;
+        case 'reveal': h += rReveal(step); break;
+        case 'loading': h += rLoading(step); break;
+        case 'results': h += rResults(); break;
+        case 'testimonials': h += rTest(step); break;
+        case 'solution': h += rSol(step); break;
+        case 'features': h += rFeat(step); break;
+        case 'bonuses': h += rBonus(step); break;
+        case 'price': h += rPrice(); break;
+        case 'guarantee': h += rGuar(); break;
+        case 'cta': h += rCta(); break;
+      }
+      h += '</div>'; ctr.innerHTML = h;
+      requestAnimationFrame(() => { const e = document.getElementById('cs'); if (e) e.classList.add('active') });
+      if (step.type === 'reveal') setTimeout(() => { const e = document.querySelector('.stn'); if (e) e.classList.add('an') }, 300);
+      if (step.type === 'loading') runLoad(step);
+      if (step.type === 'results') setTimeout(animGauge, 500);
+      if (step.type === 'features') animFeat();
+      if (step.type === 'bonuses') animBon();
+      if (step.type === 'testimonials') startCarousel();
+      if (step.type === 'cta') startTimer();
+    }
+
+    function rIntro(s) { return `<span class="si fiu">${s.icon}</span><h1 class="st fiu d1">${s.title}</h1><p class="ss fiu d2">${s.sub}</p><div class="fiu d3" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:12px"><button class="cta" onclick="next()">${s.btn}</button><span style="font-size:11px;color:var(--text2)">🔒 100% confidencial · Toma 2 minutos</span></div>` }
+
+    function rSingle(s) { let o = s.opts.map((x, i) => `<div class="oc fiu d${i + 1}" data-tp="single" data-k="${s.k}" data-v="${esc(x.t)}"><span class="oi">${x.i}</span><span>${x.t}</span><span class="cc"></span></div>`).join(''); return `<h2 class="st fiu" style="font-size:20px">${s.q}</h2>${s.sub ? `<p class="ss fiu d1">${s.sub}</p>` : '<div style="height:12px"></div>'}<div class="og">${o}</div>` }
+
+    function rYesNo(s) { return `<h2 class="st fiu" style="font-size:20px">${s.q}</h2>${s.sub ? `<p class="ss fiu d1">${s.sub}</p>` : '<div style="height:12px"></div>'}<div class="yng fiu d2"><button class="ynb" data-tp="yn" data-k="${s.k}" data-v="yes">👍 Sí</button><button class="ynb" data-tp="yn" data-k="${s.k}" data-v="no">👎 No</button></div>` }
+
+    function rScale(s) { let d = ''; for (let i = 1; i <= 10; i++)d += `<div class="sc-d" data-tp="sc" data-k="${s.k}" data-v="${i}">${i}</div>`; return `<h2 class="st fiu" style="font-size:20px">${s.q}</h2>${s.sub ? `<p class="ss fiu d1">${s.sub}</p>` : '<div style="height:12px"></div>'}<div class="sc-c fiu d2"><div class="sc-t">${d}</div><div class="sc-l"><span>${s.lo}</span><span>${s.hi}</span></div></div>` }
+
+    function rMulti(s) { let o = s.opts.map((x, i) => `<div class="oc fiu d${i + 1}" data-tp="multi" data-k="${s.k}" data-v="${esc(x.t)}"><span class="oi">${x.i}</span><span>${x.t}</span><span class="cb"></span></div>`).join(''); return `<h2 class="st fiu" style="font-size:20px">${s.q}</h2>${s.sub ? `<p class="ss fiu d1">${s.sub}</p>` : '<div style="height:12px"></div>'}<div class="og">${o}</div><button class="cnt" id="mc" onclick="next()">${s.btn || 'Continuar'}</button>` }
+
+    function rReveal(s) { return `<span class="si fiu">${s.icon}</span><div class="stn">${s.stat}</div><p class="ss" style="margin-bottom:12px;font-size:16px;color:var(--text);font-weight:500">${s.txt}</p><p class="ss" style="margin-bottom:8px">${s.det}</p><span style="font-size:11px;color:var(--text2);font-style:italic">${s.src}</span><button class="acnt" onclick="next()" style="margin-top:28px">Continuar →</button>` }
+
+    function rLoading(s) { return `<div class="lc"><div class="lr"></div><p class="lt" id="ldt">${s.msgs[0]}</p><div class="lp"><div class="lpf" id="ldf" style="width:0%"></div></div></div>` }
+
+    function rResults() {
+      const sc = calcScore(), co = sColor(sc), la = sLabel(sc);
+      const cf = Math.min(100, (ans.confidence || 5) * 10);
+      let kn = 30; if (ans.knowSpots === 'yes') kn += 30; const z = ans.zones || ''; if (z.includes('6')) kn = 90; else if (z.includes('4')) kn = 60; else if (z.includes('2')) kn = 40;
+      let te = 35; if (ans.fullBody === 'yes') te += 30; const o = ans.orgFreq || ''; if (o.includes('Siempre')) te = 90; else if (o.includes('mayoría')) te = 65; else if (o.includes('mitad')) te = 45;
+      let cn = 50; const ii = ans.initiation || ''; if (ii.includes('Muy')) cn = 85; else if (ii.includes('menudo')) cn = 70; else if (ii.includes('nunca')) cn = 25; else if (ii.includes('Raramente')) cn = 35;
+      return `<span class="si fiu">📋</span><h2 class="st fiu d1" style="font-size:20px">Tu Puntuación de Rendimiento Íntimo</h2><div class="gc fiu d2"><div class="gbg" id="gbg"><div class="gin"><div class="gscore" id="gsc" style="color:${co}">0</div><div class="glbl">${la}</div></div></div></div><div class="bd fiu d3"><div class="bi"><span class="bl">Confianza</span><div class="bbr"><div class="bfl" id="bf1" style="width:0%;background:${sColor(cf)}"></div></div><span class="bv">${cf}%</span></div><div class="bi"><span class="bl">Conocimiento Anatómico</span><div class="bbr"><div class="bfl" id="bf2" style="width:0%;background:${sColor(kn)}"></div></div><span class="bv">${kn}%</span></div><div class="bi"><span class="bl">Dominio de Técnica</span><div class="bbr"><div class="bfl" id="bf3" style="width:0%;background:${sColor(te)}"></div></div><span class="bv">${te}%</span></div><div class="bi"><span class="bl">Satisfacción de la Pareja</span><div class="bbr"><div class="bfl" id="bf4" style="width:0%;background:${sColor(cn)}"></div></div><span class="bv">${cn}%</span></div></div><p class="ss fiu d4" style="font-size:13px">Según tus respuestas, hay <strong style="color:var(--accent)">áreas significativas de mejora</strong>. ¿La buena noticia? Cada una de ellas se puede corregir con la orientación adecuada.</p><button class="cta fiu d5" onclick="next()">Ver Cómo Mejorar Mi Puntuación →</button>`
+    }
+
+    function rTest(s) {
+      let dots = s.items.map((_, i) => `<div class="td${i === 0 ? ' act' : ''}" id="td${i}"></div>`).join('');
+      let cards = s.items.map((x, i) => `<div class="tc" id="tc${i}" style="display:${i === 0 ? 'block' : 'none'}"><div class="ts">${'★'.repeat(x.s)}</div><p class="tt">${x.t}</p><p class="ta">— ${x.a}</p></div>`).join('');
+      return `<span class="si fiu">💬</span><h2 class="st fiu d1" style="font-size:20px">${s.title}</h2><p class="ss fiu d2">Más de 30,000 hombres ya han transformado su vida íntima.</p><div class="fiu d3" style="width:100%">${cards}<div class="tds">${dots}</div></div><button class="acnt fiu d4" onclick="next()">Continuar →</button>`
+    }
+
+    function rSol(s) {
+      let st = s.stats.map((x, i) => `<div style="text-align:center" class="fiu d${i + 2}"><div style="font-size:28px;font-weight:900" class="gt">${x.v}</div><div style="font-size:11px;color:var(--text2);margin-top:2px">${x.l}</div></div>`).join('');
+      return `<span class="si fiu">🏆</span><h2 class="st fiu d1" style="font-size:20px">Tu Solución Personalizada</h2><div style="margin:16px 0;padding:16px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);width:100%" class="fiu d2"><h3 style="font-size:22px;font-weight:800;text-align:center;margin-bottom:4px" class="gt">${s.name}</h3><p style="font-size:12px;color:var(--text2);text-align:center">por Roxy Fox — Sexóloga Certificada</p></div><p class="ss fiu d2" style="font-size:13px">${s.sub}</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;width:100%;margin:8px 0 24px">${st}</div><button class="cta fiu d5" onclick="next()">Muéstrame Qué Incluye →</button>`
+    }
+
+    function rFeat(s) {
+      let f = s.feats.map((x, i) => `<div class="fc" id="ft${i}"><span class="fi">${x.i}</span><div><div class="fti">${x.t}</div><div class="fd">${x.d}</div></div></div>`).join('');
+      return `<h2 class="st fiu" style="font-size:20px">${s.title}</h2><div style="height:8px"></div><div class="og">${f}</div><button class="acnt" onclick="next()" style="margin-top:20px">Ver los Bonos →</button>`
+    }
+
+    function rBonus(s) {
+      let b = s.bns.map((x, i) => `<div class="bc" id="bn${i}"><div class="bh"><span class="bbdg">${x.b}</span><span class="bval">${x.v}</span><span style="font-size:12px;color:#22c55e;font-weight:700;margin-left:4px">GRATIS</span></div><div class="btl">${x.t}</div><div class="bdc">${x.d}</div></div>`).join('');
+      return `<span class="si fiu">🎁</span><h2 class="st fiu d1" style="font-size:20px">${s.title}</h2><p class="ss fiu d1">${s.sub}</p><div class="og">${b}</div><div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text2)" class="fiu d2">Valor total de los bonos: <strong style="color:var(--accent);text-decoration:line-through">$541</strong> — <strong style="color:#22c55e">tuyos GRATIS hoy</strong></div><button class="acnt" onclick="next()" style="margin-top:16px">Ver el Precio Especial →</button>`
+    }
+
+    function rPrice() { return `<span class="si fiu">💰</span><h2 class="st fiu d1" style="font-size:20px">Oferta Exclusiva para <span class="gt">Participantes del Quiz</span></h2><p class="ss fiu d2">Según tus resultados, calificas para el máximo descuento disponible hoy.</p><div class="ps fiu d3"><div class="po">$1,000</div><div class="po" style="font-size:16px">$497</div><div class="pc">$27</div><div class="pp">Pago único · Acceso de por vida</div><div class="pdy">Eso es menos de $0.15/día</div></div><div style="width:100%;text-align:left;margin:12px 0" class="fiu d4"><div style="font-size:13px;font-weight:600;margin-bottom:8px">Todo incluido:</div><div style="font-size:12px;color:var(--text2);line-height:2.2">✅ Programa Completo Secretos del Orgasmo<br>✅ Bono 1: Masterclass en Vivo (valor $97)<br>✅ Bono 2: Desbloqueando la Mente Femenina (valor $147)<br>✅ Bono 3: Sistema de Obsesión Sexual (valor $297)<br>✅ Garantía de Devolución de 60 Días</div></div><div style="font-size:14px;font-weight:700;text-align:center;color:var(--text2);margin:8px 0" class="fiu d5">Valor total: <span style="text-decoration:line-through">$1,538</span> → <span style="color:#22c55e">Tú pagas: $27</span></div><button class="acnt fiu d5" onclick="next()">Continuar →</button>` }
+
+    function rGuar() { return `<span class="si fiu" style="font-size:64px">🛡️</span><h2 class="st fiu d1" style="font-size:20px">Cero Riesgo — <span class="gt">Garantía de 60 Días</span></h2><p class="ss fiu d2">Prueba el programa completo durante 60 días. Mira las lecciones. Aplica las técnicas. Si no sientes que valió cada centavo, obtén un reembolso completo — sin preguntas.</p><div class="gb fiu d3"><span class="gbi">✅</span><div class="gbt"><strong>100% de devolución</strong> dentro de 60 días. Incluso si solicitas reembolso, <strong>conservas los 3 bonos</strong> para siempre como agradecimiento.</div></div><div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:16px" class="fiu d4"><div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)"><span>🔒</span> Encriptación de nivel bancario protege tus datos</div><div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)"><span>👁️</span> Cobro discreto — nadie lo sabrá</div><div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)"><span>📱</span> Acceso instantáneo en cualquier dispositivo</div></div><button class="cta fiu d5" onclick="next()">Estoy Listo — Muéstrame el Paso Final →</button>` }
+
+    function rCta() { return `<span class="si fiu" style="font-size:52px">🔥</span><h2 class="st fiu d1" style="font-size:22px">Tu Lugar Está <span class="gt">Reservado</span></h2><p class="ss fiu d2">Este precio especial expira cuando el temporizador llegue a cero. Después, vuelve a $497.</p><div class="tmc fiu d3" id="tmc"><div class="tmb"><div class="tmv" id="tmm">14</div><div class="tml">Minutos</div></div><div style="font-size:24px;font-weight:800;color:var(--text2);padding-top:8px">:</div><div class="tmb"><div class="tmv" id="tms">59</div><div class="tml">Segundos</div></div></div><button class="cta pulse fiu d4" style="font-size:18px;padding:20px 32px" onclick="showConfirmation()">DESBLOQUEAR ACCESO COMPLETO — $27</button><div class="tbg fiu d5"><div class="tbgi">🔒 Seguro</div><div class="tbgi">🛡️ Garantía 60 Días</div><div class="tbgi">👁️ 100% Discreto</div></div><p style="font-size:11px;color:var(--text2);text-align:center;margin-top:20px;line-height:1.6" class="fiu d6">Acceso inmediato después de la compra. Funciona en cualquier dispositivo.<br>Tu estado de cuenta mostrará un nombre genérico y discreto.</p>` }
+
+    function showConfirmation() {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+      overlay.innerHTML = `<div style="background:#12121a;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px 24px;max-width:400px;width:100%;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px">✅</div>
+        <h3 style="font-size:20px;font-weight:800;margin-bottom:8px;color:#ededf0">¡Gracias por tu interés!</h3>
+        <p style="font-size:14px;color:#8888a0;line-height:1.6;margin-bottom:20px">Tu evaluación ha sido completada con éxito. Un representante se pondrá en contacto contigo pronto con los detalles de acceso al programa.</p>
+        <p style="font-size:12px;color:#8b5cf6;font-weight:600;margin-bottom:20px">Revisa tu correo electrónico para los próximos pasos.</p>
+        <button style="padding:14px 28px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;" onclick="this.closest('div').parentElement.remove()">Entendido</button>
+      </div>`;
+      document.body.appendChild(overlay);
+    }
+
+    function esc(s) { return s.replace(/"/g, '&quot;').replace(/'/g, '&#39;') }
+
+    document.addEventListener('click', function (e) {
+      const si = e.target.closest('[data-tp="single"]');
+      if (si) { ans[si.dataset.k] = si.dataset.v; document.querySelectorAll('[data-tp="single"]').forEach(c => c.classList.remove('sel')); si.classList.add('sel'); setTimeout(next, 500); return }
+      const yn = e.target.closest('[data-tp="yn"]');
+      if (yn) { ans[yn.dataset.k] = yn.dataset.v; setTimeout(next, 400); return }
+      const sc = e.target.closest('[data-tp="sc"]');
+      if (sc) { ans[sc.dataset.k] = parseInt(sc.dataset.v); document.querySelectorAll('.sc-d').forEach(d => d.classList.remove('act')); sc.classList.add('act'); setTimeout(next, 600); return }
+      const mi = e.target.closest('[data-tp="multi"]');
+      if (mi) { const k = mi.dataset.k, v = mi.dataset.v; if (!ans[k]) ans[k] = []; if (mi.classList.contains('sel')) { mi.classList.remove('sel'); ans[k] = ans[k].filter(x => x !== v) } else { mi.classList.add('sel'); ans[k].push(v) } const b = document.getElementById('mc'); if (b) b.classList.toggle('en', ans[k].length > 0); return }
+    });
+
+    function next() {
+      const el = document.getElementById('cs');
+      if (el) { el.classList.remove('active'); el.classList.add('exit') }
+      setTimeout(() => { cs++; if (cs < S.length) render(cs) }, 350);
+    }
+
+    function runLoad(s) {
+      const msgs = s.msgs; let p = 0, mi = 0; const dur = 4500, iv = 50, inc = 100 / (dur / iv);
+      const li = setInterval(() => {
+        p += inc; const fl = document.getElementById('ldf'), tx = document.getElementById('ldt');
+        if (fl) fl.style.width = Math.min(p, 100) + '%';
+        const nm = Math.floor((p / 100) * msgs.length);
+        if (nm !== mi && nm < msgs.length) { mi = nm; if (tx) { tx.style.opacity = 0; setTimeout(() => { if (tx) { tx.textContent = msgs[mi]; tx.style.opacity = 1 } }, 200) } }
+        if (p >= 100) { clearInterval(li); setTimeout(next, 500) }
+      }, iv);
+    }
+
+    function animGauge() {
+      const sc = calcScore(), co = sColor(sc), se = document.getElementById('gsc'), bg = document.getElementById('gbg');
+      if (!se || !bg) return; let c = 0;
+      const ai = setInterval(() => { c++; if (c > sc) { clearInterval(ai); return } se.textContent = c; bg.style.background = 'conic-gradient(' + co + ' 0deg,' + co + ' ' + (c / 100 * 360) + 'deg,rgba(255,255,255,0.04) ' + (c / 100 * 360) + 'deg)' }, 20);
+      setTimeout(() => { ['bf1', 'bf2', 'bf3', 'bf4'].forEach(id => { const el = document.getElementById(id); if (el) { const pr = el.closest('.bi'), vl = pr?.querySelector('.bv'); if (vl) el.style.width = vl.textContent } }) }, 600);
+    }
+
+    function animFeat() { document.querySelectorAll('.fc').forEach((c, i) => setTimeout(() => c.classList.add('vis'), 150 * (i + 1))) }
+    function animBon() { document.querySelectorAll('.bc').forEach((c, i) => setTimeout(() => c.classList.add('vis'), 300 * (i + 1))) }
+
+    function startCarousel() {
+      let c = 0; const n = 4;
+      tInt = setInterval(() => {
+        const oc = document.getElementById('tc' + c), od = document.getElementById('td' + c);
+        if (oc) oc.style.display = 'none'; if (od) od.classList.remove('act');
+        c = (c + 1) % n;
+        const nc = document.getElementById('tc' + c), nd = document.getElementById('td' + c);
+        if (nc) nc.style.display = 'block'; if (nd) nd.classList.add('act');
+      }, 3500);
+    }
+
+    function startTimer() {
+      let m = 14, s = 59;
+      tmInt = setInterval(() => {
+        s--; if (s < 0) { s = 59; m-- } if (m < 0) { clearInterval(tmInt); return }
+        const me = document.getElementById('tmm'), se = document.getElementById('tms');
+        if (me) me.textContent = String(m).padStart(2, '0');
+        if (se) se.textContent = String(s).padStart(2, '0');
+      }, 1000);
+    }
+
+    render(0);
+  </script>
+
+
+
+</body></html>
