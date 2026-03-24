@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONGRATULATIONS! Your Purchase Is Being Processed...</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #f0f0f0;
+      line-height: 1.6;
+      background: linear-gradient(to bottom, #4a0000 0%, #220000 40%, #0a0000 100%);
+      min-height: 100vh;
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 15px;
+    }
+
+    h1 {
+      color: #ff4d4d;
+      text-align: center;
+      font-size: 2.1em;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .alert {
+      background: rgba(255, 0, 0, 0.2);
+      color: #ffdddd;
+      padding: 14px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #800000;
+    }
+
+    .hero-image {
+      text-align: center;
+      margin: 25px 0;
+    }
+
+    .hero-image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .vigor-image {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .vigor-image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(255, 100, 0, 0.4), 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    strong {
+      color: #ff9999;
+    }
+
+    .price-section {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 25px 15px;
+      border-radius: 12px;
+      margin: 40px 0;
+      text-align: center;
+      border: 2px dashed #c00000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .price-section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .old-price {
+      font-size: 1.6em;
+      margin-bottom: 8px;
+      color: #ff6666;
+      font-weight: bold;
+    }
+
+    .old-price .strike {
+      text-decoration: line-through;
+    }
+
+    .price {
+      font-size: 1.4em;
+      color: #FFE600;
+      font-weight: bold;
+    }
+
+    .daily-price {
+      font-size: 1.3em;
+      color: #FFE600;
+      margin-top: 15px;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(255, 230, 0, 0.6), 0 0 20px rgba(255, 230, 0, 0.4), 0 0 30px rgba(255, 230, 0, 0.2);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px rgba(255, 230, 0, 0.6), 0 0 20px rgba(255, 230, 0, 0.4), 0 0 30px rgba(255, 230, 0, 0.2);
+      }
+
+      to {
+        text-shadow: 0 0 15px rgba(255, 230, 0, 0.8), 0 0 30px rgba(255, 230, 0, 0.6), 0 0 45px rgba(255, 230, 0, 0.4);
+      }
+    }
+
+    .bonus {
+      background: rgba(139, 0, 0, 0.2);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 30px 0;
+      border-left: 4px solid #c00000;
+    }
+
+    .small {
+      font-size: 0.95em;
+      color: #ccc;
+      text-align: center;
+    }
+
+    .center-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin: 25px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .center-buttons.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .alert-promo {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .alert-promo.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .popup-content {
+      background: linear-gradient(145deg, #2a0000, #1a0000);
+      border-radius: 24px;
+      padding: 40px 35px;
+      text-align: center;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 0 60px rgba(255, 50, 50, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: 2px solid #ff4d4d;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: auto;
+    }
+
+    .popup-title {
+      color: #FFE600;
+      font-size: 1.6em;
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 15px rgba(255, 230, 0, 0.4);
+      line-height: 1.3;
+    }
+
+    .wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .wheel-outer-ring {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #FFE600, #b8860b);
+      box-shadow: 0 0 30px rgba(255, 200, 0, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wheel-inner-ring {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: #1a0a00;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wheel-svg-container {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .wheel-svg {
+      width: 100%;
+      height: 100%;
+      transition: transform 7s cubic-bezier(0.15, 0.70, 0.15, 1);
+    }
+
+    .wheel-center {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(145deg, #FFE600, #b8860b);
+      border-radius: 50%;
+      z-index: 10;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.5);
+      border: 4px solid #fff;
+    }
+
+    .wheel-pointer {
+      position: absolute;
+      top: -20px;
+      z-index: 20;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+    }
+
+    .result-text {
+      color: #FFE600;
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-top: 25px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      text-shadow: 0 0 25px rgba(255, 230, 0, 0.6);
+    }
+
+    .result-text.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .btn-container {
+      position: relative;
+      margin-top: 25px;
+    }
+
+    .popup-btn {
+      background: linear-gradient(145deg, #22c55e, #16a34a);
+      color: #fff;
+      border: none;
+      padding: 18px 50px;
+      font-size: 1.1em;
+      font-weight: bold;
+      border-radius: 14px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      box-shadow: 0 6px 30px rgba(34, 197, 94, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .popup-btn.show {
+      opacity: 1;
+      transform: translateY(0);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 6px 30px rgba(34, 197, 94, 0.5);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 40px rgba(34, 197, 94, 0.8), 0 0 60px rgba(34, 197, 94, 0.4);
+      }
+    }
+
+    .popup-btn:hover {
+      animation-play-state: paused;
+      transform: scale(1.08);
+      box-shadow: 0 10px 50px rgba(34, 197, 94, 0.9);
+    }
+
+    .emoji-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .floating-emoji {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .floating-emoji.animate {
+      animation: floatUp 2s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(0.5);
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(1.2);
+      }
+    }
+
+    .segment-text {
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      font-size: 14px;
+      fill: #fff;
+    }
+
+    .segment-text-dark {
+      fill: #1a0000;
+    }
+
+    .segment-text-50 {
+      font-size: 20px;
+      fill: #1a0000;
+      font-weight: 900;
+    }
+
+    /* DESKTOP GRANDE */
+    @media (min-width: 1200px) {
+      .popup-content {
+        max-width: 600px;
+        padding: 50px 45px;
+      }
+
+      .popup-title {
+        font-size: 2em;
+      }
+
+      .wheel-container {
+        width: 420px;
+        height: 420px;
+      }
+
+      .wheel-outer-ring {
+        width: 420px;
+        height: 420px;
+      }
+
+      .wheel-inner-ring {
+        width: 390px;
+        height: 390px;
+      }
+
+      .wheel-svg-container {
+        width: 360px;
+        height: 360px;
+      }
+
+      .wheel-center {
+        width: 70px;
+        height: 70px;
+      }
+
+      .wheel-pointer svg {
+        width: 50px;
+        height: 62px;
+      }
+
+      .result-text {
+        font-size: 1.8em;
+      }
+
+      .popup-btn {
+        padding: 22px 60px;
+        font-size: 1.2em;
+      }
+
+      .segment-text {
+        font-size: 18px;
+      }
+
+      .segment-text-50 {
+        font-size: 26px;
+      }
+
+      .floating-emoji {
+        font-size: 32px;
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1199px) {
+      .popup-content {
+        max-width: 520px;
+        padding: 45px 40px;
+      }
+
+      .popup-title {
+        font-size: 1.8em;
+      }
+
+      .wheel-container {
+        width: 360px;
+        height: 360px;
+      }
+
+      .wheel-outer-ring {
+        width: 360px;
+        height: 360px;
+      }
+
+      .wheel-inner-ring {
+        width: 335px;
+        height: 335px;
+      }
+
+      .wheel-svg-container {
+        width: 310px;
+        height: 310px;
+      }
+
+      .wheel-center {
+        width: 60px;
+        height: 60px;
+      }
+
+      .wheel-pointer svg {
+        width: 44px;
+        height: 55px;
+      }
+
+      .result-text {
+        font-size: 1.6em;
+      }
+
+      .popup-btn {
+        padding: 20px 55px;
+        font-size: 1.15em;
+      }
+
+      .segment-text {
+        font-size: 16px;
+      }
+
+      .segment-text-50 {
+        font-size: 22px;
+      }
+
+      .floating-emoji {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 767px) and (min-width: 481px) {
+      .popup-content {
+        max-width: 420px;
+        padding: 35px 30px;
+      }
+
+      .popup-title {
+        font-size: 1.5em;
+        margin-bottom: 25px;
+      }
+
+      .wheel-container {
+        width: 280px;
+        height: 280px;
+      }
+
+      .wheel-outer-ring {
+        width: 280px;
+        height: 280px;
+      }
+
+      .wheel-inner-ring {
+        width: 258px;
+        height: 258px;
+      }
+
+      .wheel-svg-container {
+        width: 238px;
+        height: 238px;
+      }
+
+      .wheel-center {
+        width: 48px;
+        height: 48px;
+      }
+
+      .result-text {
+        font-size: 1.3em;
+      }
+
+      .popup-btn {
+        padding: 16px 45px;
+        font-size: 1.05em;
+      }
+
+      .segment-text {
+        font-size: 13px;
+      }
+
+      .segment-text-50 {
+        font-size: 18px;
+      }
+
+      .old-price {
+        font-size: 1.4em;
+      }
+
+      .price {
+        font-size: 1.2em;
+      }
+
+      .daily-price {
+        font-size: 1.15em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .popup-overlay {
+        padding: 15px;
+      }
+
+      .popup-content {
+        padding: 28px 20px;
+        border-radius: 20px;
+      }
+
+      .popup-title {
+        font-size: 1.3em;
+        margin-bottom: 20px;
+      }
+
+      .wheel-container {
+        width: 240px;
+        height: 240px;
+      }
+
+      .wheel-outer-ring {
+        width: 240px;
+        height: 240px;
+      }
+
+      .wheel-inner-ring {
+        width: 220px;
+        height: 220px;
+      }
+
+      .wheel-svg-container {
+        width: 200px;
+        height: 200px;
+      }
+
+      .wheel-center {
+        width: 40px;
+        height: 40px;
+      }
+
+      .wheel-pointer {
+        top: -16px;
+      }
+
+      .wheel-pointer svg {
+        width: 32px;
+        height: 40px;
+      }
+
+      .result-text {
+        font-size: 1.15em;
+        margin-top: 18px;
+      }
+
+      .popup-btn {
+        padding: 14px 35px;
+        font-size: 0.95em;
+      }
+
+      .segment-text {
+        font-size: 11px;
+      }
+
+      .segment-text-50 {
+        font-size: 15px;
+      }
+
+      .floating-emoji {
+        font-size: 20px;
+      }
+
+      .old-price {
+        font-size: 1.3em;
+      }
+
+      .price {
+        font-size: 1.1em;
+      }
+
+      .daily-price {
+        font-size: 1.1em;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .popup-content {
+        padding: 22px 15px;
+      }
+
+      .popup-title {
+        font-size: 1.15em;
+        margin-bottom: 18px;
+      }
+
+      .wheel-container {
+        width: 210px;
+        height: 210px;
+      }
+
+      .wheel-outer-ring {
+        width: 210px;
+        height: 210px;
+      }
+
+      .wheel-inner-ring {
+        width: 192px;
+        height: 192px;
+      }
+
+      .wheel-svg-container {
+        width: 175px;
+        height: 175px;
+      }
+
+      .wheel-center {
+        width: 35px;
+        height: 35px;
+      }
+
+      .wheel-pointer {
+        top: -14px;
+      }
+
+      .wheel-pointer svg {
+        width: 28px;
+        height: 35px;
+      }
+
+      .result-text {
+        font-size: 1em;
+        margin-top: 15px;
+      }
+
+      .popup-btn {
+        padding: 12px 28px;
+        font-size: 0.9em;
+      }
+
+      .segment-text {
+        font-size: 10px;
+      }
+
+      .segment-text-50 {
+        font-size: 14px;
+      }
+
+      .floating-emoji {
+        font-size: 18px;
+      }
+
+      .old-price {
+        font-size: 1.2em;
+      }
+
+      .price {
+        font-size: 1em;
+      }
+
+      .daily-price {
+        font-size: 1em;
+      }
+    }
+
+    @media (max-height: 650px) {
+      .popup-overlay {
+        align-items: flex-start;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .popup-content {
+        padding: 20px 18px;
+      }
+
+      .popup-title {
+        margin-bottom: 15px;
+        font-size: 1.2em;
+      }
+
+      .wheel-container {
+        width: 200px;
+        height: 200px;
+      }
+
+      .wheel-outer-ring {
+        width: 200px;
+        height: 200px;
+      }
+
+      .wheel-inner-ring {
+        width: 182px;
+        height: 182px;
+      }
+
+      .wheel-svg-container {
+        width: 165px;
+        height: 165px;
+      }
+
+      .wheel-center {
+        width: 35px;
+        height: 35px;
+      }
+
+      .wheel-pointer {
+        top: -14px;
+      }
+
+      .wheel-pointer svg {
+        width: 28px;
+        height: 35px;
+      }
+
+      .result-text {
+        font-size: 1em;
+        margin-top: 12px;
+      }
+
+      .btn-container {
+        margin-top: 15px;
+      }
+
+      .popup-btn {
+        padding: 12px 30px;
+        font-size: 0.9em;
+      }
+
+      .segment-text {
+        font-size: 9px;
+      }
+
+      .segment-text-50 {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="popup-overlay" id="wheelPopup">
+    <div class="popup-content">
+      <div class="popup-title">🎰 Guarantee Your Unique<br>Discount Now! 🎰</div>
+
+      <div class="wheel-container">
+        <svg class="wheel-pointer" width="40" height="50" viewBox="0 0 40 50">
+          <defs>
+            <linearGradient id="pointerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#FFE600" />
+              <stop offset="100%" style="stop-color:#b8860b" />
+            </linearGradient>
+          </defs>
+          <polygon points="20,50 0,0 40,0" fill="url(#pointerGrad)" stroke="#fff" stroke-width="2" />
+        </svg>
+
+        <div class="wheel-outer-ring">
+          <div class="wheel-inner-ring">
+            <div class="wheel-svg-container">
+              <svg class="wheel-svg" id="wheelSvg" viewBox="0 0 300 300">
+                <defs>
+                  <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFE600" />
+                    <stop offset="50%" style="stop-color:#FFC107" />
+                    <stop offset="100%" style="stop-color:#FF9800" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="wheel-center"></div>
+      </div>
+
+      <div class="result-text" id="resultText">🎉 CONGRATULATIONS! You won 50% OFF! 🎉</div>
+
+      <div class="btn-container" id="btnContainer">
+        <div class="emoji-container" id="emojiContainer"></div>
+        <button class="popup-btn" id="claimBtn" onclick="closePopup()">Claim My Discount</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <h1>CONGRATULATIONS! Your Purchase Is Being Processed...</h1>
+
+    <div class="alert">⚠️ IMPORTANT: Do Not Close This Page Yet</div>
+
+    <div class="hero-image">
+      <img src="imagens/Isabella Rossini.jpeg" alt="Isabella Rossini">
+    </div>
+
+    <p>Hi, it's me again, <strong>Isabella Rossini</strong>, and I want to congratulate you on your access to <strong>Secrets of the Orgasm</strong>.</p>
+
+    <p>Keep this page open to avoid errors while processing your purchase.</p>
+
+    <p>While we finalize everything, I need to tell you something that can <strong>multiply your results</strong>...</p>
+
+    <p>Imagine mastering not only the techniques of female orgasm, but also having a <strong>huge and thick penis</strong> that makes all women submissive to you, crazy to be dominated by your horse-like member all night long.</p>
+
+    <p>And if any woman ever told you that <strong>size doesn't matter</strong>, she's lying to you. I'm the only one here who's going to be completely transparent and honest with you.</p>
+
+    <p>If you ever felt insecure about your penis size, this message is for you.</p>
+
+    <p>If you're ashamed to take off your clothes in front of a woman... If you've ever felt like a failure as a man because you didn't have really great sex... <strong>Keep reading</strong>.</p>
+
+    <p>If you're not in a private place or don't want to read about wild sex, you can close this page right now.</p>
+
+    <p>In the next few seconds I'm going to show you what the entire porn and pharmaceutical industry hides from you to sell you pills, gels, sprays, and penis pumps that <strong>give you no results</strong>.</p>
+
+    <p>This secret is a <strong>little red drink</strong> coming straight from the African country of Cameroon, where men have the largest penises in the world, and it can increase your tool's size by up to <strong>9 centimeters (3.5 inches)</strong>.</p>
+
+    <p>This drink is famous in the world of porn actors, leading to explosive penis growth keeping it rock-hard for hours.</p>
+
+    <p>I call it <strong>African Vigor</strong>.</p>
+
+    <div class="vigor-image">
+      <img src="imagens/Vigor Africano.png" alt="Vigor Africano">
+    </div>
+
+    <p>And you can finally have a huge and thick penis like a soda can. Your age doesn't matter, let alone your genetics.</p>
+
+    <p>The reason I'm here today is a patient of mine, John Vincent, 32 years old, who came to my office carrying a life of romantic disappointments on his back.</p>
+
+    <p>It all started in his teenage years in a locker room when he took his clothes off for the first time in front of his peers and became a laughingstock. But the worst embarrassment of his life was with a girl from work.</p>
+
+    <p>After a dinner and a few glasses of wine, things got hot. But when she asked him to go deep and hard, the worst happened. Due to the size of his little friend, he couldn't fit well inside her. The girl made up a ridiculous excuse, got dressed, and left.</p>
+
+    <p>"Since then, I can't have sex with anyone because of the shame regarding my penis size," he said.</p>
+
+    <p>After helping John increase his penis size, I decided: I need to help more men who suffer from this too.</p>
+
+    <p>This red drink is very common in Cameroon, known for having men with the largest penises in the world. It was thanks to an international health conference that I discovered this powerful mix of natural herbs capable of growing your tool by up to <strong>9 centimeters (3.5 inches)</strong>.</p>
+
+    <p>The doctors who monitor the most famous porn actors in the world were there. What you didn't know is that this powerful mix is what porn actors use to make their members big, thick, and full of veins for hours. They don't need to use meds or surgeries.</p>
+
+    <p>What they don't tell you is that the root of the problem is a deficiency of nitric oxide, a hormone that stops penis growth after adolescence.</p>
+
+    <p>This protein is present in drugs like Tadalafil and Cialis. However, these drugs bring risks: severe headaches, vision changes, altered heartbeats, even heart attacks.</p>
+
+    <p>The natural herbs in African Vigor, properly combined, are able to stimulate nitric oxide without causing side effects.</p>
+
+    <p>When you start taking African Vigor, you'll feel a huge urge to have sex. You'll feel your penis swollen, hot, with throbbing veins. It will go in much tighter. She will cum once, twice until the sheets are soaked.</p>
+
+    <p>And tomorrow, before 10 am, she will send you a text. Just like it happened with our clients:</p>
+
+    <p>"Seriously Victor, I can't stop thinking about what you did to me yesterday. My legs shook all night. My WhatsApp is full of girls texting me. I already gained 3 centimeters!"</p>
+
+    <p>You will be known in their group of friends as the orgasm master. Because women love to spread the news.</p>
+
+    <p>You need to drink African Vigor for three weeks, every day right after waking up, just like I teach in the video inside the app. These herbs are native to Brazil and you probably have them in your house.</p>
+
+    <p>With all the benefits you will get, I could easily charge a very high price. But my intention is to help as many men as possible.</p>
+
+    <p>How much would you pay to become a sex machine capable of satisfying any woman with your giant dick? That is priceless, because it will change your sex life forever.</p>
+
+    <p>I decided to give away entirely for free two super exclusive bonuses only for the first men who get African Vigor right now:</p>
+
+    <div id="bonusTrigger" class="bonus">
+      <p><strong>BONUS #1:</strong> Porn Actor's Guide - Over 100 hand-picked poses with practical video examples featuring real models.</p>
+      <p><strong>BONUS #2:</strong> Women's Persuasion Manual - The 12 highly powerful phrases that flood any woman's mind and the right time to say each one.</p>
+    </div>
+
+    <div class="price-section" id="priceSection">
+      <div class="old-price">From <span class="strike">12x of $19.78 or $197 cash</span> to</div>
+      <div class="price">12x of $10.03 or $97 one-time</div>
+      <div class="daily-price">✨ Less than 35 cents a day ✨</div>
+    </div>
+
+    <div class="center-buttons" id="buttons1">
+      <div style="text-align:center">
+        <button onclick="window.location.href='https://explodely.com/p/305698870?ocu=yes&tid=up1'" style="background-color:#27AF60;padding:12px 16px;cursor:pointer;color:#FFFFFF;font-weight:600;border-radius:4px;border:1px solid #27AF60;font-size:20px;width:100%;max-width:350px;">Yes, I want to last longer!</button>
+        <div onclick="window.location.href='https://secredoforgasm.online/eua/ds1-tsl'" style="margin-top:1rem;cursor:pointer;font-size:16px;text-decoration:underline;font-family:sans-serif;color:#ccc;">No, I prefer to keep finishing quickly...</div>
+      </div>
+    </div>
+
+    <div class="alert alert-promo" id="alertPromo">⚠️ ATTENTION: This promotional price is only available here and now.</div>
+
+    <p class="small" style="margin-top:50px;">IRONCLAD GUARANTEE: If in 90 days you don't get results, I will refund 100% of your money immediately.</p>
+
+  </div>
+
+  <script>
+    const segments = [
+      { value: '0%', color: '#1a1a1a' },
+      { value: '50%', color: 'url(#goldGrad)', isGold: true },
+      { value: '0%', color: '#1a1a1a' },
+      { value: '5%', color: '#cc0000' },
+      { value: '10%', color: '#1a1a1a' },
+      { value: '15%', color: '#cc0000' },
+      { value: '20%', color: '#1a1a1a' },
+      { value: '25%', color: '#cc0000' },
+      { value: '30%', color: '#1a1a1a' },
+      { value: '35%', color: '#cc0000' }
+    ];
+
+    const svg = document.getElementById('wheelSvg');
+    const centerX = 150;
+    const centerY = 150;
+    const radius = 150;
+    const segmentAngle = 360 / segments.length;
+
+    function polarToCartesian(cx, cy, r, angleDeg) {
+      const angleRad = (angleDeg - 90) * Math.PI / 180;
+      return {
+        x: cx + r * Math.cos(angleRad),
+        y: cy + r * Math.sin(angleRad)
+      };
+    }
+
+    function createSegmentPath(startAngle, endAngle) {
+      const start = polarToCartesian(centerX, centerY, radius, endAngle);
+      const end = polarToCartesian(centerX, centerY, radius, startAngle);
+      const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
+      return `M ${centerX} ${centerY} L ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y} Z`;
+    }
+
+    segments.forEach((segment, index) => {
+      const startAngle = index * segmentAngle;
+      const endAngle = startAngle + segmentAngle;
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', createSegmentPath(startAngle, endAngle));
+      path.setAttribute('fill', segment.color);
+      path.setAttribute('stroke', '#2a2a2a');
+      path.setAttribute('stroke-width', '0.5');
+      svg.appendChild(path);
+
+      const textAngle = startAngle + segmentAngle / 2;
+      const textRadius = radius * 0.68;
+      const textPos = polarToCartesian(centerX, centerY, textRadius, textAngle);
+
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', textPos.x);
+      text.setAttribute('y', textPos.y);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('dominant-baseline', 'middle');
+      text.setAttribute('transform', `rotate(${textAngle}, ${textPos.x}, ${textPos.y})`);
+
+      if (segment.isGold) {
+        text.setAttribute('class', 'segment-text segment-text-50');
+      } else {
+        text.setAttribute('class', segment.isGold ? 'segment-text segment-text-dark' : 'segment-text');
+      }
+
+      text.textContent = segment.value;
+      svg.appendChild(text);
+    });
+
+    const emojis = ['😏', '❤️', '😘', '🔥', '💋', '😈', '💕', '🥵'];
+    let emojiInterval;
+
+    function createFloatingEmoji() {
+      const container = document.getElementById('emojiContainer');
+      const emoji = document.createElement('span');
+      emoji.className = 'floating-emoji';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+      const angle = Math.random() * 360;
+      const distance = 80 + Math.random() * 50;
+      const x = Math.cos(angle * Math.PI / 180) * distance;
+      const y = Math.sin(angle * Math.PI / 180) * distance;
+
+      emoji.style.left = `calc(50% + ${x}px)`;
+      emoji.style.top = `calc(50% + ${y}px)`;
+
+      container.appendChild(emoji);
+
+      requestAnimationFrame(() => {
+        emoji.classList.add('animate');
+      });
+
+      setTimeout(() => {
+        emoji.remove();
+      }, 2000);
+    }
+
+    function startEmojiAnimation() {
+      emojiInterval = setInterval(createFloatingEmoji, 250);
+    }
+
+    function stopEmojiAnimation() {
+      clearInterval(emojiInterval);
+    }
+
+    function showPriceSection() {
+      document.getElementById('priceSection').classList.add('show');
+
+      setTimeout(() => {
+        document.getElementById('buttons1').classList.add('show');
+      }, 300);
+
+      setTimeout(() => {
+        document.getElementById('alertPromo').classList.add('show');
+      }, 600);
+    }
+
+    let popupShown = false;
+
+    function checkScroll() {
+      if (popupShown) return;
+
+      const trigger = document.getElementById('bonusTrigger');
+      const triggerPosition = trigger.getBoundingClientRect().top;
+      const screenPosition = window.innerHeight / 1.3;
+
+      if (triggerPosition < screenPosition) {
+        showPopup();
+        popupShown = true;
+      }
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('wheelPopup');
+      popup.style.display = 'flex';
+
+      setTimeout(() => {
+        const wheel = document.getElementById('wheelSvg');
+
+        const fullRotations = 5 * 360;
+        const targetAngle = 360 - 54;
+        const totalRotation = fullRotations + targetAngle;
+
+        wheel.style.transform = `rotate(${totalRotation}deg)`;
+
+        setTimeout(() => {
+          document.getElementById('resultText').classList.add('show');
+          setTimeout(() => {
+            document.getElementById('claimBtn').classList.add('show');
+            startEmojiAnimation();
+          }, 300);
+        }, 7200);
+      }, 1000);
+    }
+
+    function closePopup() {
+      stopEmojiAnimation();
+      document.getElementById('wheelPopup').style.display = 'none';
+
+      setTimeout(() => {
+        showPriceSection();
+
+        setTimeout(() => {
+          document.getElementById('priceSection').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }, 200);
+      }, 300);
+    }
+
+    window.addEventListener('scroll', checkScroll);
+  </script>
+
+</body>
+
+</html>
